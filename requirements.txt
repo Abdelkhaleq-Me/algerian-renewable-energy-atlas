@@ -16,3 +16,5 @@ python-dotenv
 gunicorn
 alambic
 SQLAlchemy
+psycopg2
+flask_alembic
