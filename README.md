@@ -119,7 +119,7 @@ The Algerian Renewable Energy Atlas is a digital platform designed to map, quant
 * **External Data:** Integration Requests
 
 ### Frontend
-* **Core:** HTML, CSS, Vanilla JavaScript
+* **Core:** HTML, Tailwind CSS, Vanilla JavaScript
 * **Mapping:** Leaflet.js
 * **Visualization:** Plotly.js/D3.js, Deck.gl
 

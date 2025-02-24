@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Atlas - Algerian Renewable Energy Atlas{% endblock %}
+
+{% block content %}
+<section>
+  <h1 class="text-3xl font-bold mb-4">Atlas</h1>
+  <div class="flex flex-col md:flex-row">
+    <!-- Left Panel: Interactive Map -->
+    <div class="w-full md:w-1/2 p-2">
+      <div id="mapContainer" style="height: 500px;">
+        <!-- The Leaflet map will be rendered here -->
+      </div>
+      <!-- Add layer controls, search bar, and filters as needed -->
+    </div>
+
+    <!-- Right Panel: Dashboard & Data Visualizations -->
+    <div class="w-full md:w-1/2 p-2">
+      <h2 class="text-2xl mb-2">Dashboard</h2>
+      <div id="dashboard">
+        <!-- Dynamic charts (Plotly.js/D3.js) and statistics cards will be rendered here -->
+        <p>Region overview, time-series charts, and comparative analytics.</p>
+      </div>
+      <button class="mt-4 bg-indigo-500 text-white px-4 py-2 rounded">
+        Download Visualization
+      </button>
+    </div>
+  </div>
+</section>
+{% endblock %}

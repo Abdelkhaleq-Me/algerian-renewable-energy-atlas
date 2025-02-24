@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Algerian Renewable Energy Atlas{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+</head>
+<body>
+  <!-- Global Header -->
+  <header class="bg-gray-800 text-white p-4">
+    <nav class="container mx-auto flex justify-between">
+      <div class="logo">
+        <a href="{{ url_for('home.index') }}" class="font-bold">Energy Atlas</a>
+      </div>
+      <div class="navigation space-x-4">
+        <a href="{{ url_for('home.index') }}">Home</a>
+        <a href="{{ url_for('atlas.index') }}">Atlas</a>
+        <a href="{{ url_for('download.index') }}">Download</a>
+        <a href="{{ url_for('about.index') }}">About</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mx-auto my-8">
+    {% block content %}
+    {% endblock %}
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="bg-gray-800 text-white p-4 text-center">
+    <p>&copy; {{ current_year|default(2023) }} Algerian Renewable Energy Atlas. All rights reserved.</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

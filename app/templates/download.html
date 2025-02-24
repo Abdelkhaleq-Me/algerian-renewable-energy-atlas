@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Download - Algerian Renewable Energy Atlas{% endblock %}
+
+{% block content %}
+<section>
+  <h1 class="text-3xl font-bold mb-4">Download Data & Reports</h1>
+  <div class="mb-8">
+    <h2 class="text-2xl mb-2">Download Datasets</h2>
+    <form method="GET" action="/download/dataset">
+      <!-- Add filter controls for Energy Type and Region -->
+      <div>
+        <label for="energyType">Energy Type:</label>
+        <select id="energyType" name="energyType">
+          <option value="solar">Solar</option>
+          <option value="wind">Wind</option>
+        </select>
+      </div>
+      <div>
+        <label for="region">Region (Welaya):</label>
+        <select id="region" name="region">
+          <option value="">Select Region</option>
+          <!-- Options populated dynamically -->
+        </select>
+      </div>
+      <div>
+        <label for="format">Format:</label>
+        <select id="format" name="format">
+          <option value="csv">CSV</option>
+          <option value="geojson">GeoJSON</option>
+        </select>
+      </div>
+      <button type="submit" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">
+        Download Dataset
+      </button>
+    </form>
+  </div>
+
+  <div>
+    <h2 class="text-2xl mb-2">Generate Report</h2>
+    <form method="GET" action="/download/report">
+      <!-- Add similar filters for report generation -->
+      <div>
+        <label for="reportEnergyType">Energy Type:</label>
+        <select id="reportEnergyType" name="energyType">
+          <option value="solar">Solar</option>
+          <option value="wind">Wind</option>
+        </select>
+      </div>
+      <div>
+        <label for="reportRegion">Region (Welaya):</label>
+        <select id="reportRegion" name="region">
+          <option value="">Select Region</option>
+          <!-- Options populated dynamically -->
+        </select>
+      </div>
+      <button type="submit" class="mt-2 bg-green-500 text-white px-4 py-2 rounded">
+        Generate Report
+      </button>
+    </form>
+  </div>
+</section>
+{% endblock %}
