@@ -76,16 +76,14 @@ class ExternalDataResource(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('lat', type=float, required=True, help="Latitude is required")
         parser.add_argument('lon', type=float, required=True, help="Longitude is required")
-        parser.add_argument('start_date', type=str, help="Start date (YYYYMMDD)")  # Optional
-        parser.add_argument('end_date', type=str, help="End date (YYYYMMDD)")      # Optional
+        parser.add_argument('start_date', type=str, help="Start date (YYYYMMDD)")
+        parser.add_argument('end_date', type=str, help="End date (YYYYMMDD)")
+        parser.add_argument('parameters', type=str, action='append', help="List of parameters (e.g., T2M)") #NEW
         args = parser.parse_args()
 
-
-        # Use current date as default end_date if not provided
         end_date = args['end_date'] or datetime.datetime.now().strftime('%Y%m%d')
-        start_date = args['start_date'] or "20240101" # Default start date
+        start_date = args['start_date'] or "20240101"
 
-        # Basic date validation (you might want more robust validation)
         try:
             datetime.datetime.strptime(start_date, '%Y%m%d')
             datetime.datetime.strptime(end_date, '%Y%m%d')
@@ -93,31 +91,32 @@ class ExternalDataResource(Resource):
             return {"error": "Invalid date format. Use YYYYMMDD."}, 400
 
         base_url = "https://power.larc.nasa.gov/api/temporal/daily/point"
-        community = "RE"  # Renewable Energy
+        community = "RE"
 
-        # Define the parameters you want to fetch
-        parameters = [
-            ("T2M", "temperature"),        # Temperature at 2 meters
-            ("ALLSKY_SFC_SW_DWN", "solar_down"),  # All Sky Surface Shortwave Downward Irradiance
-            ("WS10M", "wind_10m"),          # Wind Speed at 10 meters
-            ("WS50M", "wind_50m")           # Wind Speed at 50 meters
-        ]
+        # Use the provided parameters, or default to T2M if none are specified
+        requested_parameters = args['parameters'] or ['T2M'] #NEW
 
         results = {}
-        for param, label in parameters:
+        for param in requested_parameters: #NEW - Iterate through requested params
+            # Map API parameter names to more descriptive labels (optional)
+            label = {
+                'T2M': 'temperature_2m',
+                'ALLSKY_SFC_SW_DWN': 'solar_down',
+                'WS10M': 'wind_10m',
+                'WS50M': 'wind_50m'
+            }.get(param, param) # Use .get() for safety
+
+
             url = (f"{base_url}?community={community}"
-                   f"¶meters={param}"
+                   f"¶meters={param}"  # Only request the specific parameter
                    f"&latitude={args['lat']}&longitude={args['lon']}"
-                   f"&start={start_date}&end={end_date}") # Add start and end dates
-            # Add API Key if required (replace YOUR_API_KEY with your actual key)
-            # url += "&api_key=YOUR_API_KEY"
+                   f"&start={start_date}&end={end_date}")
 
             try:
                 response = requests.get(url, timeout=10)
-                response.raise_for_status()  # Raise HTTPError for bad responses (4xx or 5xx)
-                results[label] = response.json()
+                response.raise_for_status()
+                results[label] = response.json() #Store results using descriptive labels
             except requests.exceptions.RequestException as e:
-                # More specific error handling
                 if isinstance(e, requests.exceptions.Timeout):
                     error_message = f"Timeout error fetching data for {param}."
                 elif isinstance(e, requests.exceptions.HTTPError):
@@ -125,8 +124,6 @@ class ExternalDataResource(Resource):
                 else:
                     error_message = f"Failed to fetch data for {param}: {str(e)}"
                 results[label] = {"error": error_message}
-                # Log the error (using Flask's logger)
-                db.get_app().logger.error(error_message) # Use the app logger
-
+                db.get_app().logger.error(error_message)
 
         return jsonify(results)
