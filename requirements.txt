@@ -3,7 +3,7 @@ Flask-RESTful
 Flask-SQLAlchemy
 Flask-Babel
 Flask-Caching
-Flask-Migrate
+Flask-Migrate==4.0.5
 GeoAlchemy2
 psycopg2-binary
 requests

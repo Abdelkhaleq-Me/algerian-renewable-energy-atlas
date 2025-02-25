@@ -1,27 +1,31 @@
-# app/config.py
-
+# app/config.py (Complete Example)
 import os
+from datetime import timedelta
 
 class Config:
-    """Base configuration."""
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'your-secret-key'
+    SECRET_KEY = os.environ.get('SECRET_KEY', 'default-secret-key') #Use default value
     DEBUG = False
     TESTING = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-
+    SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
+    PERMANENT_SESSION_LIFETIME = timedelta(minutes=60)
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') #Get the variable from the environment
+    CACHE_TYPE = 'simple'  # Use 'redis' in production
+    CACHE_REDIS_URL = 'redis://localhost:6379/0'
 
 class DevelopmentConfig(Config):
-    """Development configuration."""
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'postgresql://postgres:15152015@localhost:5432/algerian_renewable_energy_atlas'
-    CACHE_TYPE = 'simple'
+    SESSION_COOKIE_SECURE = False
+    SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 class TestingConfig(Config):
-    """Testing configuration."""
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'  # In-memory SQLite DB for testing
+    DEBUG = True
+    SESSION_COOKIE_SECURE = False
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
 
 class ProductionConfig(Config):
-    """Production configuration."""
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'postgresql://postgres:15152015@localhost:5432/algerian_renewable_energy_atlas'
-    # Add production-specific configurations here, e.g., logging, error reporting
+    # Production-specific settings (use environment variables)
+    CACHE_TYPE = 'redis'
+    # DATABASE_URL *must* be set in the environment

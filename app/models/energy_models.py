@@ -1,3 +1,4 @@
+# app/models/energy_models.py (Corrected)
 from sqlalchemy import Column, Integer, String, Date, Numeric, ForeignKey, Index
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
