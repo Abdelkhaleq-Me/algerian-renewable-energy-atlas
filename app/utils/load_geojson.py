@@ -63,6 +63,6 @@ if __name__ == '__main__':
         db.create_all()  # Create tables if they don't exist
 
         # --- IMPORTANT: Adjust file paths below! ---
-        load_geojson('app/utils/algeria_welayes.json', AlgeriaWelayes)  # Correct path
-        load_geojson('app/utils/algeria_boundry.json', AlgeriaBoundary)  # Correct path
+        load_geojson('app/utils/algeria_welayes.json', AlgeriaWelayes)  
+        load_geojson('app/utils/algeria_boundry.json', AlgeriaBoundary)  
     print("Data loading process complete.")
