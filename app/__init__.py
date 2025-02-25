@@ -4,7 +4,7 @@ from app.config import DevelopmentConfig  # Or ProductionConfig
 from app.extensions import init_app as init_extensions
 from app.routes import init_app as init_routes
 from app.api import api_bp #Import api_bp
-
+from app import errors  # Import the errors module
 def create_app(config_class=DevelopmentConfig):
     app = Flask(__name__)
     app.config.from_object(config_class)
@@ -12,5 +12,5 @@ def create_app(config_class=DevelopmentConfig):
     init_extensions(app)
     init_routes(app)
     app.register_blueprint(api_bp, url_prefix='/api') #Register the blueprint
-
+    errors.init_app(app)  # Initialize error handlers
     return app
