@@ -1,0 +1,60 @@
+:root {
+    /* Light Theme (Default) */
+    --color-primary: #F5A623;
+    --color-primary-light: #FFD152;
+    --color-primary-dark: #D68C00;
+    
+    --color-secondary: #3498DB;
+    --color-secondary-light: #64B1F3;
+    --color-secondary-dark: #1C6EA4;
+    
+    --color-tertiary: #2ECC71;
+    --color-tertiary-light: #58D88A;
+    --color-tertiary-dark: #1EA056;
+    
+    --color-background-primary: #FFFFFF;
+    --color-background-secondary: #F7F9FA;
+    --color-background-tertiary: #EDF2F7;
+    
+    --color-text-primary: #1A202C;
+    --color-text-secondary: #4A5568;
+    --color-text-tertiary: #718096;
+    
+    --color-border: #CBD5E0;
+    --color-divider: #E2E8F0;
+    
+    --color-success: #28A745;
+    --color-warning: #FFC107;
+    --color-error: #DC3545;
+    --color-info: #17A2B8;
+  }
+  
+  [data-theme="dark"] {
+    --color-primary: #FFCC29;
+    --color-primary-light: #FFE580;
+    --color-primary-dark: #D6A700;
+    
+    --color-secondary: #4DADFF;
+    --color-secondary-light: #9FD3FF;
+    --color-secondary-dark: #0077CC;
+    
+    --color-tertiary: #41E296;
+    --color-tertiary-light: #79F9BD;
+    --color-tertiary-dark: #1AA053;
+    
+    --color-background-primary: #121212;
+    --color-background-secondary: #1E1E1E;
+    --color-background-tertiary: #2D2D2D;
+    
+    --color-text-primary: #F7FAFC;
+    --color-text-secondary: #CBD5E0;
+    --color-text-tertiary: #A0AEC0;
+    
+    --color-border: #4A5568;
+    --color-divider: #2D2D2D;
+    
+    --color-success: #4CD964;
+    --color-warning: #FFCC00;
+    --color-error: #FF3B30;
+    --color-info: #34AADC;
+  }

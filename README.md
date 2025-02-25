@@ -242,46 +242,53 @@ Algerian Renewable Energy Atlas (Root)
 ```
 algerian-renewable-energy-atlas/
 ├── app/
-│   ├── __init__.py          # Initialize Flask app and load extensions
-│   ├── config.py            # Configuration settings for different environments
-│   ├── extensions.py        # Initialize Flask extensions (SQLAlchemy, Babel, Caching, etc.)
-│   ├── models/              # Database models and spatial models using SQLAlchemy/GeoAlchemy2
-│   │   ├── __init__.py
-│   │   └── energy_models.py
-│   ├── routes/              # Flask routes for different pages
-│   │   ├── __init__.py
-│   │   ├── home.py          # Routes for the Home page
-│   │   ├── atlas.py         # Routes for the Atlas page (interactive map)
-│   │   ├── download.py      # Routes for the Download page
-│   │   └── about.py         # Routes for the About page
-│   ├── api/                 # RESTful API endpoints using Flask-RESTful
-│   │   ├── __init__.py
-│   │   └── endpoints.py
-│   ├── ai/                  # AI/ML modules for energy potential prediction
-│   │   ├── __init__.py
-│   │   ├── models.py        # ML model definitions (Scikit-learn/TensorFlow)
-│   │   └── predict.py       # Prediction routines exposed to the Flask app
-│   ├── utils/               # Utility functions, helpers, and data processing scripts (e.g., with GeoPandas)
-│   │   ├── __init__.py
-│   │   └── geospatial.py
-│   ├── templates/           # HTML templates (Jinja2)
-│   │   ├── base.html        # Base template with global header/footer
-│   │   ├── home.html
-│   │   ├── atlas.html
-│   │   ├── download.html
-│   │   └── about.html
-│   └── static/              # Frontend assets
-│       ├── css/             # Custom CSS files
-│       ├── js/              # Vanilla JS files and library integrations (Leaflet.js, Plotly.js/D3.js, Deck.gl)
-│       └── images/          # Image assets (logos, maps, icons)
-│
-├── migrations/              # Database migration scripts (managed by Flask-Migrate)
-├── tests/                   # Unit and integration tests
-│   ├── __init__.py
-│   ├── test_routes.py
-│   ├── test_api.py
-│   └── test_models.py
-├── requirements.txt         # Python dependencies list
-├── run.py                   # Application entry point to run the Flask app
-└── README.md                # Project overview and documentation
+│   ├── __init__.py               # Application factory, registers blueprints & extensions
+│   ├── config.py                 # Configuration settings (development, production, etc.)
+│   ├── extensions.py             # Initialization of extensions (SQLAlchemy, Migrate, Babel, Cache)
+│   ├── models/
+│   │   ├── __init__.py           # (Optional) Aggregates model imports
+│   │   └── energy_models.py      # Your spatial and raster models
+│   ├── routes/
+│   │   ├── __init__.py           # Initializes and registers blueprints for site pages
+│   │   ├── home.py               # Routes for the Home page
+│   │   ├── atlas.py              # Routes for the Atlas page (includes map integration)
+│   │   ├── download.py           # Routes for the Download page
+│   │   └── about.py              # Routes for the About page
+│   ├── api/
+│   │   ├── __init__.py           # API blueprint initialization (api_bp and Api instance)
+│   │   └── endpoints.py          # RESTful endpoints for spatial and external data
+│   └── utils/
+│       └── load_geojson.py       # Script to load GeoJSON data into the database
+├── migrations/                   # Flask-Migrate migration scripts
+│   ├── env.py                    # Alembic environment configuration
+│   ├── script.py.mako            # Migration script template
+│   └── versions/
+│       ├── 7babb588c434_initial_migration_create_tables_for_.py
+│       └── 952b043a72dc_initial_migration_create_tables_for_.py
+├── static/
+│   ├── css/
+│   │   ├── theme.css             # Contains CSS variables for light/dark themes
+│   │   └── styles.css            # Global CSS styles
+│   ├── js/
+│   │   └── script.js             # Global JavaScript functions and event handlers
+│   └── images/
+│       ├── logo.png              # Site logo
+|       ├── background.jpg                   
+│       └── favicon.png           # Favicon for your site
+├── templates/
+│   ├── base.html                 # Base template with header, footer, and global assets
+│   ├── home.html                 # Home page template (extends base.html)
+│   ├── atlas.html                # Atlas page template
+│   ├── download.html             # Download page template
+│   ├── about.html                # About page template
+│   └── errors/
+│       ├── 400.html
+|       ├── 403.html
+|       ├── 404.html         # Custom 404 error page
+│       └── 500.html              # Custom 500 error page
+├── .env                   # Environment file for Flask (e.g., FLASK_APP=run.py FLASK_ENV=development)
+├── requirements.txt              # List of Python dependencies
+├── README.md                     # Project documentation
+└── run.py                        # Entry point to run the Flask application
+
 ```
