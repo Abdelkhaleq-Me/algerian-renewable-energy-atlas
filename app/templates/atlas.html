@@ -3,28 +3,114 @@
 {% block title %}Atlas - Algerian Renewable Energy Atlas{% endblock %}
 
 {% block content %}
-<section>
-  <h1 class="text-3xl font-bold mb-4">Atlas</h1>
-  <div class="flex flex-col md:flex-row">
-    <!-- Left Panel: Interactive Map -->
-    <div class="w-full md:w-1/2 p-2">
-      <div id="mapContainer" style="height: 500px;">
-        <!-- The Leaflet map will be rendered here -->
-      </div>
-      <!-- Add layer controls, search bar, and filters as needed -->
-    </div>
+<div class="container mx-auto py-8">
+    <h1 class="text-3xl font-semibold text-text-primary dark:text-text-secondary mb-4">Interactive Atlas</h1>
+    <div class="flex flex-col md:flex-row">
+        <!-- Left Panel: Interactive Map -->
+        <div class="w-full md:w-1/2 p-4">
+            <!-- Map Container -->
+            <div id="mapContainer" class="relative h-[500px] mb-4">
+                <!-- Leaflet map will be rendered here -->
+                <div id="map" class="z-10 h-full w-full"></div>
 
-    <!-- Right Panel: Dashboard & Data Visualizations -->
-    <div class="w-full md:w-1/2 p-2">
-      <h2 class="text-2xl mb-2">Dashboard</h2>
-      <div id="dashboard">
-        <!-- Dynamic charts (Plotly.js/D3.js) and statistics cards will be rendered here -->
-        <p>Region overview, time-series charts, and comparative analytics.</p>
-      </div>
-      <button class="mt-4 bg-indigo-500 text-white px-4 py-2 rounded">
-        Download Visualization
-      </button>
+                <!-- Loading Indicator -->
+                <div id="mapLoadingIndicator" class="absolute bottom-0 left-0 w-full bg-background-secondary dark:bg-background-tertiary text-text-primary dark:text-text-secondary text-center py-2 z-20">
+                    Loading data...
+                </div>
+            </div>
+
+            <!-- Layer Control -->
+            <div id="layerControl" class="mb-4">
+                <h3 class="text-xl font-semibold text-text-primary dark:text-text-secondary mb-2">Layer Control</h3>
+                <div class="flex flex-col">
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" class="form-checkbox h-5 w-5 text-primary" id="solarLayerToggle">
+                        <span class="ml-2 text-text-primary dark:text-text-secondary">Solar Irradiance</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" class="form-checkbox h-5 w-5 text-secondary" id="windLayerToggle">
+                        <span class="ml-2 text-text-primary dark:text-text-secondary">Wind Speed</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" class="form-checkbox h-5 w-5 text-tertiary" id="greenHydrogenLayerToggle">
+                        <span class="ml-2 text-text-primary dark:text-text-secondary">Green Hydrogen Potential</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Filter Controls -->
+            <div id="filterControls">
+                <h3 class="text-xl font-semibold text-text-primary dark:text-text-secondary mb-2">Filter Controls</h3>
+                <div class="mb-2">
+                    <label for="energyTypeFilter" class="block text-text-primary dark:text-text-secondary text-sm font-bold mb-2">Energy Type:</label>
+                    <select id="energyTypeFilter" class="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary dark:text-text-secondary leading-tight focus:outline-none focus:shadow-outline bg-background-primary dark:bg-background-secondary">
+                        <option value="">All</option>
+                        <option value="solar">Solar</option>
+                        <option value="wind">Wind</option>
+                        <option value="green_hydrogen">Green Hydrogen</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="searchBar" class="block text-text-primary dark:text-text-secondary text-sm font-bold mb-2">Search:</label>
+                    <input type="text" id="searchBar" placeholder="Region, coordinates..." class="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary dark:text-text-secondary leading-tight focus:outline-none focus:shadow-outline bg-background-primary dark:bg-background-secondary">
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel: Dashboard & Data Visualizations -->
+        <div class="w-full md:w-1/2 p-4">
+            <h2 class="text-2xl font-semibold text-text-primary dark:text-text-secondary mb-2">Dashboard</h2>
+            <div id="dashboard">
+                <!-- Wilaya Overview Block -->
+                <div id="wilayaOverview" class="mb-4">
+                    <h3 class="text-xl font-semibold text-text-primary dark:text-text-secondary mb-2">Wilaya Overview</h3>
+                    <p class="text-text-secondary dark:text-text-tertiary">Select a region to view detailed information.</p>
+                    <!-- Region Selector (Dropdown) -->
+                    <select id="regionSelector" class="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary dark:text-text-secondary leading-tight focus:outline-none focus:shadow-outline bg-background-primary dark:bg-background-secondary">
+                        <option value="">Select Region</option>
+                        <!-- Options will be populated dynamically using JavaScript -->
+                    </select>
+                </div>
+
+                <!-- Stats Cards Block -->
+                <div id="statsCards" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <!-- Solar Potential -->
+                    <div class="bg-background-secondary dark:bg-background-tertiary rounded-lg shadow-md p-4">
+                        <h4 class="text-lg font-semibold text-text-primary dark:text-text-secondary mb-2">Solar Potential</h4>
+                        <p class="text-text-secondary dark:text-text-tertiary">Data not available</p>
+                    </div>
+                    <!-- Wind Speed -->
+                    <div class="bg-background-secondary dark:bg-background-tertiary rounded-lg shadow-md p-4">
+                        <h4 class="text-lg font-semibold text-text-primary dark:text-text-secondary mb-2">Wind Speed</h4>
+                        <p class="text-text-secondary dark:text-text-tertiary">Data not available</p>
+                    </div>
+                    <!-- Green Hydrogen Potential -->
+                    <div class="bg-background-secondary dark:bg-background-tertiary rounded-lg shadow-md p-4">
+                        <h4 class="text-lg font-semibold text-text-primary dark:text-text-secondary mb-2">Green Hydrogen Potential</h4>
+                        <p class="text-text-secondary dark:text-text-tertiary">Data not available</p>
+                    </div>
+                </div>
+
+                <!-- Time-Series Chart Block -->
+                <div id="timeSeriesChart" class="mb-4">
+                    <h3 class="text-xl font-semibold text-text-primary dark:text-text-secondary mb-2">Time-Series Chart</h3>
+                    <p class="text-text-secondary dark:text-text-tertiary">Chart will be rendered here.</p>
+                </div>
+
+                <!-- Comparative Analytics Chart Block -->
+                <div id="comparativeChart" class="mb-4">
+                    <h3 class="text-xl font-semibold text-text-primary dark:text-text-secondary mb-2">Comparative Analytics Chart</h3>
+                    <p class="text-text-secondary dark:text-text-tertiary">Chart will be rendered here.</p>
+                </div>
+
+                <!-- Download Visualization Button Block -->
+                <div>
+                    <button class="bg-primary hover:bg-primary-light text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">
+                        Download Visualization
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</section>
+</div>
 {% endblock %}

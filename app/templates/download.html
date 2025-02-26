@@ -3,61 +3,86 @@
 {% block title %}Download - Algerian Renewable Energy Atlas{% endblock %}
 
 {% block content %}
-<section>
-  <h1 class="text-3xl font-bold mb-4">Download Data & Reports</h1>
-  <div class="mb-8">
-    <h2 class="text-2xl mb-2">Download Datasets</h2>
-    <form method="GET" action="/download/dataset">
-      <!-- Add filter controls for Energy Type and Region -->
-      <div>
-        <label for="energyType">Energy Type:</label>
-        <select id="energyType" name="energyType">
-          <option value="solar">Solar</option>
-          <option value="wind">Wind</option>
-        </select>
-      </div>
-      <div>
-        <label for="region">Region (Welaya):</label>
-        <select id="region" name="region">
-          <option value="">Select Region</option>
-          <!-- Options populated dynamically -->
-        </select>
-      </div>
-      <div>
-        <label for="format">Format:</label>
-        <select id="format" name="format">
-          <option value="csv">CSV</option>
-          <option value="geojson">GeoJSON</option>
-        </select>
-      </div>
-      <button type="submit" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">
-        Download Dataset
-      </button>
-    </form>
-  </div>
+<div class="container mx-auto py-8">
+    <!-- Download Datasets Section -->
+    <section class="mb-8">
+        <h2 class="text-3xl font-semibold text-text-primary dark:text-text-secondary mb-4">Download Datasets</h2>
+        <p class="text-text-secondary dark:text-text-tertiary mb-2">Select the desired filters to download datasets:</p>
+        <form method="GET" action="/download/dataset" class="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-4">
+            <!-- Energy Type Filter -->
+            <div>
+                <label for="energyType" class="block text-text-primary dark:text-text-secondary text-sm font-bold mb-2">Energy Type:</label>
+                <select id="energyType" name="energyType" class="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary dark:text-text-secondary leading-tight focus:outline-none focus:shadow-outline bg-background-primary dark:bg-background-secondary">
+                    <option value="solar">Solar</option>
+                    <option value="wind">Wind</option>
+                    <option value="green_hydrogen">Green Hydrogen</option>
+                </select>
+            </div>
 
-  <div>
-    <h2 class="text-2xl mb-2">Generate Report</h2>
-    <form method="GET" action="/download/report">
-      <!-- Add similar filters for report generation -->
-      <div>
-        <label for="reportEnergyType">Energy Type:</label>
-        <select id="reportEnergyType" name="energyType">
-          <option value="solar">Solar</option>
-          <option value="wind">Wind</option>
-        </select>
-      </div>
-      <div>
-        <label for="reportRegion">Region (Welaya):</label>
-        <select id="reportRegion" name="region">
-          <option value="">Select Region</option>
-          <!-- Options populated dynamically -->
-        </select>
-      </div>
-      <button type="submit" class="mt-2 bg-green-500 text-white px-4 py-2 rounded">
-        Generate Report
-      </button>
-    </form>
-  </div>
-</section>
+            <!-- Region Filter -->
+            <div>
+                <label for="region" class="block text-text-primary dark:text-text-secondary text-sm font-bold mb-2">Region (Welaya):</label>
+                <select id="region" name="region" class="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary dark:text-text-secondary leading-tight focus:outline-none focus:shadow-outline bg-background-primary dark:bg-background-secondary">
+                    <option value="">Select Region</option>
+                    <!-- Options populated dynamically -->
+                </select>
+            </div>
+
+            <!-- Dataset Format Filter -->
+            <div>
+                <label for="format" class="block text-text-primary dark:text-text-secondary text-sm font-bold mb-2">Format:</label>
+                <select id="format" name="format" class="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary dark:text-text-secondary leading-tight focus:outline-none focus:shadow-outline bg-background-primary dark:bg-background-secondary">
+                    <option value="csv">CSV</option>
+                    <option value="geojson">GeoJSON</option>
+                </select>
+            </div>
+
+            <!-- Download Button -->
+            <div>
+                <button type="submit" class="bg-primary hover:bg-primary-light text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">
+                    Download Dataset
+                </button>
+            </div>
+        </form>
+        <p class="text-text-secondary dark:text-text-tertiary mt-4">Apply filters to narrow down the dataset and select the desired format before downloading.</p>
+    </section>
+
+    <!-- Generate Report Section -->
+    <section>
+        <h2 class="text-3xl font-semibold text-text-primary dark:text-text-secondary mb-4">Generate Report</h2>
+        <p class="text-text-secondary dark:text-text-tertiary mb-2">Select the desired filters to generate a report:</p>
+        <form method="GET" action="/download/report" class="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-4">
+            <!-- Energy Type Filter -->
+            <div>
+                <label for="reportEnergyType" class="block text-text-primary dark:text-text-secondary text-sm font-bold mb-2">Energy Type:</label>
+                <select id="reportEnergyType" name="energyType" class="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary dark:text-text-secondary leading-tight focus:outline-none focus:shadow-outline bg-background-primary dark:bg-background-secondary">
+                    <option value="solar">Solar</option>
+                    <option value="wind">Wind</option>
+                    <option value="green_hydrogen">Green Hydrogen</option>
+                </select>
+            </div>
+
+            <!-- Region Filter -->
+            <div>
+                <label for="reportRegion" class="block text-text-primary dark:text-text-secondary text-sm font-bold mb-2">Region (Welaya):</label>
+                <select id="reportRegion" name="region" class="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary dark:text-text-secondary leading-tight focus:outline-none focus:shadow-outline bg-background-primary dark:bg-background-secondary">
+                    <option value="">Select Region</option>
+                    <!-- Options populated dynamically -->
+                </select>
+            </div>
+
+            <!-- Generate Report Button -->
+            <div>
+                <button type="submit" class="bg-secondary hover:bg-secondary-light text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">
+                    Generate Report
+                </button>
+            </div>
+        </form>
+        <p class="text-text-secondary dark:text-text-tertiary mt-4">Apply filters to specify the report content and initiate the report generation process.</p>
+        <!-- Download Report Link (Hidden initially) -->
+        <div id="reportDownloadLink" class="hidden mt-4">
+            <a href="#" class="text-blue-500 hover:text-blue-700">Download Report</a>
+        </div>
+    </section>
+</div>
 {% endblock %}

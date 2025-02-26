@@ -1,0 +1,9 @@
+#map {
+    width: 100%;
+    height: 100%;
+    z-index: 1; /* Ensure the map is above other elements */
+}
+
+#mapLoadingIndicator {
+    z-index: 2; /* Ensure the loading indicator is above the map */
+}
