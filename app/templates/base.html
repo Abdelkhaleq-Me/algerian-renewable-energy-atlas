@@ -1,39 +1,101 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ g.lang }}"> <!-- Dynamically set language -->
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{% block title %}Algerian Renewable Energy Atlas{% endblock %}</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Algerian Renewable Energy Atlas{% endblock %}</title> <!-- Dynamic title -->
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png">
+	<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <!-- Add Leaflet CSS here if needed globally, or in atlas.html if only needed there -->
+    {% block head_css %}{% endblock %} <!-- Hook for page-specific CSS in <head> -->
+
+    {% block head_js %}{% endblock %} <!-- Hook for page-specific JS in <head> if needed -->
 </head>
-<body>
-  <!-- Global Header -->
-  <header class="bg-gray-800 text-white p-4">
-    <nav class="container mx-auto flex justify-between">
-      <div class="logo">
-        <a href="{{ url_for('home.index') }}" class="font-bold">Energy Atlas</a>
-      </div>
-      <div class="navigation space-x-4">
-        <a href="{{ url_for('home.index') }}">Home</a>
-        <a href="{{ url_for('atlas.index') }}">Atlas</a>
-        <a href="{{ url_for('download.index') }}">Download</a>
-        <a href="{{ url_for('about.index') }}">About</a>
-      </div>
-    </nav>
-  </header>
+<body class="bg-background-primary text-text-primary dark:bg-background-secondary dark:text-text-secondary">
 
-  <!-- Main Content -->
-  <main class="container mx-auto my-8">
-    {% block content %}
-    {% endblock %}
-  </main>
+    <header class="global-header bg-background-secondary dark:bg-background-tertiary shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <!-- Logo -->
+            <div class="logo">
+                <a href="{{ url_for('home') }}" class="flex items-center">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Algerian Renewable Energy Atlas Logo" class="h-8 w-auto mr-2">
+                    <span class="font-bold text-xl">ARE Atlas</span> <!-- Or your site name -->
+                </a>
+            </div>
 
-  <!-- Global Footer -->
-  <footer class="bg-gray-800 text-white p-4 text-center">
-    <p>&copy; {{ current_year|default(2023) }} Algerian Renewable Energy Atlas. All rights reserved.</p>
-  </footer>
+            <!-- Navigation Links -->
+            <nav class="main-nav">
+                <ul class="hidden md:flex space-x-6"> <!-- Hidden on small screens, flex on medium+ -->
+                    <li><a href="{{ url_for('home') }}" class="hover:text-primary dark:hover:text-primary-light transition-colors duration-200">{{ _('Home') }}</a></li>
+                    <li><a href="{{ url_for('atlas') }}" class="hover:text-primary dark:hover:text-primary-light transition-colors duration-200">{{ _('Atlas') }}</a></li>
+                    <li><a href="{{ url_for('download') }}" class="hover:text-primary dark:hover:text-primary-light transition-colors duration-200">{{ _('Download') }}</a></li>
+                    <li><a href="{{ url_for('about') }}" class="hover:text-primary dark:hover:text-primary-light transition-colors duration-200">{{ _('About') }}</a></li>
+                </ul>
+            </nav>
 
-  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+            <!-- Right Side Actions -->
+            <div class="header-actions flex items-center space-x-4">
+                <!-- Search Bar (Initially Placeholder - Implement on Atlas Page) -->
+                <div class="search-bar hidden md:block"> <!-- Hidden on small screens, block on medium+ -->
+                    <input type="search" placeholder="{{ _('Search...') }}" class="px-3 py-2 rounded-md border border-color-border dark:border-color-border bg-background-primary dark:bg-background-secondary text-text-primary dark:text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark">
+                </div>
+
+                <!-- Language Switch Dropdown -->
+                <div class="language-switcher relative">
+                    <button id="lang-button" aria-haspopup="true" aria-expanded="false" class="flex items-center justify-center px-3 py-2 rounded-md border border-color-border dark:border-color-border bg-background-primary dark:bg-background-secondary text-text-primary dark:text-text-secondary hover:bg-background-tertiary dark:hover:bg-background-tertiary transition-colors duration-200">
+                        <span class="mr-1">{{ g.language_name }}</span> <!-- Current language name -->
+                        <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                    </button>
+                    <div id="lang-dropdown" class="hidden absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-background-primary dark:bg-background-secondary ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="lang-button" tabindex="-1">
+                        <div class="py-1" role="none">
+                            <a href="{{ url_for(request.endpoint, **request.view_args, lang='en') }}" class="block px-4 py-2 text-sm text-text-primary dark:text-text-secondary hover:bg-background-tertiary dark:hover:bg-background-tertiary" role="menuitem" tabindex="-1" id="lang-option-english">English</a>
+                            <a href="{{ url_for(request.endpoint, **request.view_args, lang='fr') }}" class="block px-4 py-2 text-sm text-text-primary dark:text-text-secondary hover:bg-background-tertiary dark:hover:bg-background-tertiary" role="menuitem" tabindex="-1" id="lang-option-french">Français</a>
+                            <a href="{{ url_for(request.endpoint, **request.view_args, lang='ar') }}" class="block px-4 py-2 text-sm text-text-primary dark:text-text-secondary hover:bg-background-tertiary dark:hover:bg-background-tertiary" role="menuitem" tabindex="-1" id="lang-option-arabic">العربية</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Theme Switch Button -->
+                <button id="theme-toggle" class="theme-switcher px-3 py-2 rounded-md border border-color-border dark:border-color-border bg-background-primary dark:bg-background-secondary text-text-primary dark:text-text-secondary hover:bg-background-tertiary dark:hover:bg-background-tertiary transition-colors duration-200" aria-label="Toggle Dark Mode">
+                    <svg id="theme-icon-light" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1m-9 0h-1m-2.5 5.196l.707-.707m1 7.07l-.707-.707M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> <!-- Light mode icon (Sun) -->
+                    <svg id="theme-icon-dark" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>  <!-- Dark mode icon (Moon) -->
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        {% block content %}
+            <!-- Page-specific content will be inserted here -->
+        {% endblock %}
+    </main>
+
+    <footer class="global-footer bg-background-secondary dark:bg-background-tertiary border-t border-color-border dark:border-color-border py-6">
+        <div class="container mx-auto px-4 text-sm text-text-secondary dark:text-text-tertiary text-center">
+            <div class="footer-nav mb-4">
+                <a href="#" class="hover:text-primary dark:hover:text-primary-light px-2">{{ _('Privacy Policy') }}</a>
+                <a href="#" class="hover:text-primary dark:hover:text-primary-light px-2">{{ _('Terms of Use') }}</a>
+                <a href="{{ url_for('about') }}" class="hover:text-primary dark:hover:text-primary-light px-2">{{ _('About') }}</a>
+                <a href="{{ url_for('contact') }}" class="hover:text-primary dark:hover:text-primary-light px-2">{{ _('Contact Us') }}</a> <!-- Assuming you'll have a contact route -->
+            </div>
+            <div class="social-links mb-4">
+                <!-- Add your social media links here -->
+                <a href="#" class="hover:text-primary dark:hover:text-primary-light px-2"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="hover:text-primary dark:hover:text-primary-light px-2"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="hover:text-primary dark:hover:text-primary-light px-2"><i class="fab fa-linkedin"></i></a>
+                <!-- ... more social icons ... -->
+            </div>
+            <div class="copyright">
+                © {{ year }} Algerian Renewable Energy Atlas. {{ _('All rights reserved.') }}
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script> <!-- Global scripts -->
+    {% block body_js %}{% endblock %} <!-- Hook for page-specific JS at the end of body -->
 </body>
 </html>
