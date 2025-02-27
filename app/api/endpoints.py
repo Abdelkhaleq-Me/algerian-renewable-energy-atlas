@@ -138,7 +138,7 @@ class ExternalDataResource(Resource):
             }.get(param, param)
 
             url = (f"{base_url}?community={community}"
-                   f"¶meters={param}"  # Corrected parameter pluralization
+                   f"&parameters={param}"  # Corrected parameter pluralization
                    f"&latitude={args['lat']}&longitude={args['lon']}"
                    f"&start={start_date}&end={end_date}&format=json") # Add format=json
 
