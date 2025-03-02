@@ -126,6 +126,13 @@ The Algerian Renewable Energy Atlas is a digital platform designed to map, quant
 ### AI/ML
 * **Libraries:** Scikit-learn, TensorFlow
 
+## Files to load on database:
+
+* **Administrative boundaries (Geojson):** algeria_boundry.json, algeria_welayes.json
+* **Solar raster (GeoTiff):** GHI.tif, DNI.tif, PVOUT.tif, TEMP.tif
+* **Wind raster (GeoTiff):** DZA_wind-speed_10m.tif, DZA_wind-speed_50m.tif, DZA_wind-speed_100m.tif, DZA_wind-speed_150m.tif
+* **Green Hydrogen (GeoTiff):** comming soon....
+
 ## 6. Website Map and Page Structure
 
 ```
