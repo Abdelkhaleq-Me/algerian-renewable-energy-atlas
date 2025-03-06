@@ -1,54 +1,65 @@
-// Theme Switcher Logic (Vanilla JavaScript)
-const themeToggle = document.getElementById('theme-toggle');
-const themeIconLight = document.getElementById('theme-icon-light');
-const themeIconDark = document.getElementById('theme-icon-dark');
-const htmlElement = document.documentElement; // Get the root html element
+// Theme Switcher
+document.addEventListener('DOMContentLoaded', () => {
+    const themeToggle = document.getElementById('theme-toggle');
+    const lightIcon = document.getElementById('theme-icon-light');
+    const darkIcon = document.getElementById('theme-icon-dark');
 
-const currentTheme = localStorage.getItem('theme');
-if (currentTheme) {
-    htmlElement.dataset.theme = currentTheme;
-    if (currentTheme === 'dark') {
-        themeIconDark.classList.remove('hidden');
-        themeIconLight.classList.add('hidden');
-    } else {
-        themeIconLight.classList.remove('hidden');
-        themeIconDark.classList.add('hidden');
+    // Check for saved theme preference or use system preference
+    const savedTheme = localStorage.getItem('theme');
+    const systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (savedTheme === 'dark' || (!savedTheme && systemDarkMode)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        lightIcon.classList.remove('hidden');
+        darkIcon.classList.add('hidden');
     }
-} else {
-    // Default to light theme if no theme is set in localStorage
-    htmlElement.dataset.theme = 'light';
-    themeIconLight.classList.remove('hidden');
-    themeIconDark.classList.add('hidden');
-}
 
+    // Theme toggle click handler
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        
+        if (newTheme === 'dark') {
+            lightIcon.classList.remove('hidden');
+            darkIcon.classList.add('hidden');
+        } else {
+            lightIcon.classList.add('hidden');
+            darkIcon.classList.remove('hidden');
+        }
+    });
 
-themeToggle.addEventListener('click', () => {
-    if (htmlElement.dataset.theme === 'light') {
-        htmlElement.dataset.theme = 'dark';
-        localStorage.setItem('theme', 'dark');
-        themeIconDark.classList.remove('hidden');
-        themeIconLight.classList.add('hidden');
-    } else {
-        htmlElement.dataset.theme = 'light';
-        localStorage.setItem('theme', 'light');
-        themeIconLight.classList.remove('hidden');
-        themeIconDark.classList.add('hidden');
+    // Language Dropdown
+    const langButton = document.getElementById('lang-button');
+    const langDropdown = document.getElementById('lang-dropdown');
+
+    langButton.addEventListener('click', () => {
+        const isExpanded = langButton.getAttribute('aria-expanded') === 'true';
+        langButton.setAttribute('aria-expanded', !isExpanded);
+        langDropdown.classList.toggle('hidden');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (event) => {
+        if (!langButton.contains(event.target) && !langDropdown.contains(event.target)) {
+            langButton.setAttribute('aria-expanded', 'false');
+            langDropdown.classList.add('hidden');
+        }
+    });
+
+    // Mobile Navigation
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileNav = document.querySelector('.main-nav ul');
+
+    if (mobileMenuButton && mobileNav) {
+        mobileMenuButton.addEventListener('click', () => {
+            mobileNav.classList.toggle('hidden');
+            mobileNav.classList.toggle('mobile-nav-open');
+        });
     }
 });
 
-// Language Switcher Dropdown Logic
-const langButton = document.getElementById('lang-button');
-const langDropdown = document.getElementById('lang-dropdown');
-
-langButton.addEventListener('click', () => {
-    langDropdown.classList.toggle('hidden');
-    langButton.setAttribute('aria-expanded', !langDropdown.classList.contains('hidden'));
-});
-
-// Close dropdown when clicking outside
-window.addEventListener('click', (event) => {
-    if (!langButton.contains(event.target) && !langDropdown.contains(event.target) && !langDropdown.classList.contains('hidden')) {
-        langDropdown.classList.add('hidden');
-        langButton.setAttribute('aria-expanded', 'false');
-    }
-});
+// Handle RTL for Arabic language
+document.documentElement.dir = document.documentElement.lang === 'ar' ? 'rtl' : 'ltr';

@@ -1,79 +1,239 @@
 <!DOCTYPE html>
-<html lang="{{ g.lang }}">
+<html lang="{{ g.lang }}" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Algerian Renewable Energy Atlas{% endblock %}</title>
-    <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png">
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicon-16x16.png') }}">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Styles -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+    <style>
+        /* Additional custom styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .nav-item-active {
+            position: relative;
+        }
+        
+        .nav-item-active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--color-primary);
+        }
+        
+        .energy-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .energy-icon:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* Energy type indicators */
+        .solar-icon {
+            color: var(--color-solar);
+        }
+        
+        .wind-icon {
+            color: var(--color-wind);
+        }
+        
+        .hydrogen-icon {
+            color: var(--color-hydrogen);
+        }
+        
+        /* Gradient background for header */
+        .header-gradient {
+            background: linear-gradient(to right, var(--color-background-primary), var(--color-background-secondary));
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        
+        /* Full-height main content */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* For atlas page, we want to hide the footer */
+        body.atlas-page footer {
+            display: none;
+        }
+        
+        body.atlas-page main {
+            padding: 0;
+        }
+    </style>
     {% block head_css %}{% endblock %}
     {% block head_js %}{% endblock %}
 </head>
-<body class="bg-background-primary text-text-primary dark:bg-background-secondary dark:text-text-secondary">
-    <header class="bg-background-secondary dark:bg-background-tertiary shadow-md sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="logo">
-                <a href="{{ url_for('home') }}" class="flex items-center">
-                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Algerian Renewable Energy Atlas Logo" class="h-8 w-auto mr-2">
-                    <span class="font-bold text-xl">ARE Atlas</span>
-                </a>
-            </div>
-            <nav class="main-nav">
-                <ul class="hidden md:flex space-x-6">
-                    <li><a href="{{ url_for('home') }}" class="hover:text-primary dark:hover:text-primary-light transition-colors duration-200">{{ _('Home') }}</a></li>
-                    <li><a href="{{ url_for('atlas') }}" class="hover:text-primary dark:hover:text-primary-light transition-colors duration-200">{{ _('Atlas') }}</a></li>
-                    <li><a href="{{ url_for('download') }}" class="hover:text-primary dark:hover:text-primary-light transition-colors duration-200">{{ _('Download') }}</a></li>
-                    <li><a href="{{ url_for('about') }}" class="hover:text-primary dark:hover:text-primary-light transition-colors duration-200">{{ _('About') }}</a></li>
-                </ul>
-            </nav>
-            <div class="header-actions flex items-center space-x-4">
-                <div class="search-bar hidden md:block">
-                    <input type="search" placeholder="{{ _('Search...') }}" class="px-3 py-2 rounded-md border border-color-border dark:border-color-border bg-background-primary dark:bg-background-secondary text-text-primary dark:text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark">
+<body class="bg-background-primary text-text-primary dark:bg-background-secondary dark:text-text-secondary {% if request.endpoint == 'atlas.index' %}atlas-page{% endif %}">
+    <header class="header-gradient shadow-md sticky top-0 z-50 border-b border-color-border dark:border-color-border">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="logo hover-lift">
+                    <a href="{{ url_for('home.index') }}" class="flex items-center space-x-3">
+                        <div class="flex items-center space-x-1">
+                            <i class="fas fa-sun solar-icon text-xl"></i>
+                            <i class="fas fa-wind wind-icon text-xl"></i>
+                            <i class="fas fa-bolt hydrogen-icon text-xl"></i>
+                        </div>
+                        <span class="font-bold text-xl">
+                            <span class="text-primary">ARE</span>
+                            <span class="text-text-primary dark:text-text-secondary">Atlas</span>
+                        </span>
+                    </a>
                 </div>
-                <div class="language-switcher relative">
-                    <button id="lang-button" aria-haspopup="true" aria-expanded="false" class="flex items-center justify-center px-3 py-2 rounded-md border border-color-border dark:border-color-border bg-background-primary dark:bg-background-secondary text-text-primary dark:text-text-secondary hover:bg-background-tertiary dark:hover:bg-background-tertiary transition-colors duration-200">
-                        <span class="mr-1">{{ g.language_name }}</span>
-                        <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
-                    </button>
-                    <div id="lang-dropdown" class="hidden absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-background-primary dark:bg-background-secondary ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="lang-button" tabindex="-1">
-                        <div class="py-1" role="none">
-                            <a href="{{ url_for(request.endpoint, **request.view_args, lang='en') }}" class="block px-4 py-2 text-sm text-text-primary dark:text-text-secondary hover:bg-background-tertiary dark:hover:bg-background-tertiary" role="menuitem" tabindex="-1" id="lang-option-english">English</a>
-                            <a href="{{ url_for(request.endpoint, **request.view_args, lang='fr') }}" class="block px-4 py-2 text-sm text-text-primary dark:text-text-secondary hover:bg-background-tertiary dark:hover:bg-background-tertiary" role="menuitem" tabindex="-1" id="lang-option-french">Français</a>
-                            <a href="{{ url_for(request.endpoint, **request.view_args, lang='ar') }}" class="block px-4 py-2 text-sm text-text-primary dark:text-text-secondary hover:bg-background-tertiary dark:hover:bg-background-tertiary" role="menuitem" tabindex="-1" id="lang-option-arabic">العربية</a>
+                <nav class="main-nav hidden md:flex items-center space-x-8">
+                    <a href="{{ url_for('home.index') }}" class="nav-link {{ 'nav-item-active' if request.endpoint == 'home.index' }}">{{ _('Home') }}</a>
+                    <a href="{{ url_for('atlas.index') }}" class="nav-link {{ 'nav-item-active' if request.endpoint == 'atlas.index' }}">{{ _('Atlas') }}</a>
+                    <a href="{{ url_for('download.index') }}" class="nav-link {{ 'nav-item-active' if request.endpoint == 'download.index' }}">{{ _('Download') }}</a>
+                    <a href="{{ url_for('about.index') }}" class="nav-link {{ 'nav-item-active' if request.endpoint == 'about.index' }}">{{ _('About') }}</a>
+                </nav>
+                <div class="header-actions flex items-center space-x-4">
+                    <div class="search-bar hidden md:block">
+                        <div class="relative">
+                            <input type="search" 
+                                   placeholder="{{ _('Search...') }}" 
+                                   class="pl-10 pr-4 py-2 rounded-full border border-color-border dark:border-color-border bg-background-primary dark:bg-background-secondary text-text-primary dark:text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50">
+                            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-text-tertiary"></i>
                         </div>
                     </div>
+                    <div class="language-switcher relative">
+                        <button id="lang-button" 
+                                class="btn flex items-center space-x-2 bg-background-primary dark:bg-background-secondary rounded-lg px-3 py-2 border border-color-border dark:border-color-border hover:shadow-sm transition-base">
+                            <span>{{ g.language_name }}</span>
+                            <i class="fas fa-chevron-down text-sm"></i>
+                        </button>
+                        <div id="lang-dropdown" 
+                             class="hidden absolute right-0 mt-2 w-40 rounded-lg shadow-lg bg-background-primary dark:bg-background-secondary ring-1 ring-black ring-opacity-5 divide-y divide-color-border">
+                            <a href="{{ url_for(request.endpoint, lang='en') }}" class="block px-4 py-2 hover:bg-background-secondary dark:hover:bg-background-tertiary rounded-t-lg">English</a>
+                            <a href="{{ url_for(request.endpoint, lang='fr') }}" class="block px-4 py-2 hover:bg-background-secondary dark:hover:bg-background-tertiary">Français</a>
+                            <a href="{{ url_for(request.endpoint, lang='ar') }}" class="block px-4 py-2 hover:bg-background-secondary dark:hover:bg-background-tertiary rounded-b-lg">العربية</a>
+                        </div>
+                    </div>
+                    <button id="theme-toggle" 
+                            class="theme-switcher p-2 rounded-full hover:bg-background-secondary dark:hover:bg-background-tertiary transition-colors duration-200" 
+                            aria-label="Toggle Dark Mode">
+                        <i id="theme-icon-light" class="fas fa-sun text-xl hidden text-solar"></i>
+                        <i id="theme-icon-dark" class="fas fa-moon text-xl text-tertiary"></i>
+                    </button>
+                    <button class="md:hidden p-2 rounded-lg hover:bg-background-secondary dark:hover:bg-background-tertiary" id="mobile-menu-button">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
                 </div>
-                <button id="theme-toggle" class="theme-switcher px-3 py-2 rounded-md border border-color-border dark:border-color-border bg-background-primary dark:bg-background-secondary text-text-primary dark:text-text-secondary hover:bg-background-tertiary dark:hover:bg-background-tertiary transition-colors duration-200" aria-label="Toggle Dark Mode">
-                    <svg id="theme-icon-light" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1m-9 0h-1m-2.5 5.196l.707-.707m1 7.07l-.707-.707M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <svg id="theme-icon-dark" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-                </button>
+            </div>
+            <!-- Mobile Menu (initially hidden) -->
+            <div id="mobile-menu" class="hidden md:hidden mt-4 py-4 border-t border-color-border dark:border-color-border">
+                <nav class="flex flex-col space-y-4">
+                    <a href="{{ url_for('home.index') }}" class="nav-link px-4 py-2 rounded-lg hover:bg-background-secondary dark:hover:bg-background-tertiary {{ 'text-primary' if request.endpoint == 'home.index' }}">{{ _('Home') }}</a>
+                    <a href="{{ url_for('atlas.index') }}" class="nav-link px-4 py-2 rounded-lg hover:bg-background-secondary dark:hover:bg-background-tertiary {{ 'text-primary' if request.endpoint == 'atlas.index' }}">{{ _('Atlas') }}</a>
+                    <a href="{{ url_for('download.index') }}" class="nav-link px-4 py-2 rounded-lg hover:bg-background-secondary dark:hover:bg-background-tertiary {{ 'text-primary' if request.endpoint == 'download.index' }}">{{ _('Download') }}</a>
+                    <a href="{{ url_for('about.index') }}" class="nav-link px-4 py-2 rounded-lg hover:bg-background-secondary dark:hover:bg-background-tertiary {{ 'text-primary' if request.endpoint == 'about.index' }}">{{ _('About') }}</a>
+                </nav>
+                <div class="mt-4 px-4">
+                    <div class="relative">
+                        <input type="search" 
+                               placeholder="{{ _('Search...') }}" 
+                               class="w-full pl-10 pr-4 py-2 rounded-lg border border-color-border dark:border-color-border bg-background-primary dark:bg-background-secondary text-text-primary dark:text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-text-tertiary"></i>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
-    <main class="container mx-auto px-4 py-8">
-        {% block content %}{% endblock %}
+
+    <main class="w-full">
+        <div class="{% if request.endpoint != 'atlas.index' %}animate-fade-in container mx-auto px-4 py-8{% else %}h-full{% endif %}">
+            {% block content %}{% endblock %}
+        </div>
     </main>
-    <footer class="bg-background-secondary dark:bg-background-tertiary border-t border-color-border dark:border-color-border py-6">
-        <div class="container mx-auto px-4 text-sm text-text-secondary dark:text-text-tertiary text-center">
-            <div class="footer-nav mb-4">
-                <a href="#" class="hover:text-primary dark:hover:text-primary-light px-2">{{ _('Privacy Policy') }}</a>
-                <a href="#" class="hover:text-primary dark:hover:text-primary-light px-2">{{ _('Terms of Use') }}</a>
-                <a href="{{ url_for('about') }}" class="hover:text-primary dark:hover:text-primary-light px-2">{{ _('About') }}</a>
-                <a href="{{ url_for('contact') }}" class="hover:text-primary dark:hover:text-primary-light px-2">{{ _('Contact Us') }}</a>
+
+    <footer class="bg-background-secondary dark:bg-background-tertiary border-t border-color-border dark:border-color-border mt-auto">
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-2 mb-2">
+                        <div class="flex items-center space-x-1">
+                            <i class="fas fa-sun solar-icon text-sm"></i>
+                            <i class="fas fa-wind wind-icon text-sm"></i>
+                            <i class="fas fa-bolt hydrogen-icon text-sm"></i>
+                        </div>
+                        <h3 class="font-semibold text-lg">
+                            <span class="text-primary">ARE</span>
+                            <span class="text-text-primary dark:text-text-secondary">Atlas</span>
+                        </h3>
+                    </div>
+                    <p class="text-sm text-text-secondary dark:text-text-tertiary">
+                        {{ _('Exploring and mapping renewable energy resources across Algeria for a sustainable future.') }}
+                    </p>
+                </div>
+                <div class="space-y-4">
+                    <h3 class="font-semibold text-lg">{{ _('Quick Links') }}</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{{ url_for('home.index') }}" class="text-sm hover:text-primary dark:hover:text-primary-light transition-base">{{ _('Home') }}</a></li>
+                        <li><a href="{{ url_for('atlas.index') }}" class="text-sm hover:text-primary dark:hover:text-primary-light transition-base">{{ _('Atlas') }}</a></li>
+                        <li><a href="{{ url_for('download.index') }}" class="text-sm hover:text-primary dark:hover:text-primary-light transition-base">{{ _('Download') }}</a></li>
+                        <li><a href="{{ url_for('about.index') }}" class="text-sm hover:text-primary dark:hover:text-primary-light transition-base">{{ _('About') }}</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-4">
+                    <h3 class="font-semibold text-lg">{{ _('Resources') }}</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-sm hover:text-primary dark:hover:text-primary-light transition-base">{{ _('Documentation') }}</a></li>
+                        <li><a href="#" class="text-sm hover:text-primary dark:hover:text-primary-light transition-base">{{ _('API') }}</a></li>
+                        <li><a href="#" class="text-sm hover:text-primary dark:hover:text-primary-light transition-base">{{ _('Research') }}</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-4">
+                    <h3 class="font-semibold text-lg">{{ _('Connect') }}</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-2xl hover:text-primary dark:hover:text-primary-light transition-base" aria-label="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="text-2xl hover:text-primary dark:hover:text-primary-light transition-base" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-2xl hover:text-primary dark:hover:text-primary-light transition-base" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="social-links mb-4">
-                <a href="#" class="hover:text-primary dark:hover:text-primary-light px-2"><i class="fab fa-facebook"></i></a>
-                <a href="#" class="hover:text-primary dark:hover:text-primary-light px-2"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="hover:text-primary dark:hover:text-primary-light px-2"><i class="fab fa-linkedin"></i></a>
-            </div>
-            <div class="copyright">
-                © {{ year }} Algerian Renewable Energy Atlas. {{ _('All rights reserved.') }}
+            <div class="mt-8 pt-8 border-t border-color-border dark:border-color-border text-center text-sm text-text-secondary dark:text-text-tertiary">
+                <p>© {{ year }} {{ _('Algerian Renewable Energy Atlas. All rights reserved.') }}</p>
             </div>
         </div>
     </footer>
+
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
     {% block body_js %}{% endblock %}
 </body>
 </html>

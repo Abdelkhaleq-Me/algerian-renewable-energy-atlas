@@ -18,6 +18,7 @@ class DevelopmentConfig(Config):
     DEBUG = True
     SESSION_COOKIE_SECURE = False
     SQLALCHEMY_TRACK_MODIFICATIONS = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///app.db'  # Default SQLite database for development
 
 class TestingConfig(Config):
     TESTING = True

@@ -6,72 +6,103 @@
     <div class="container mx-auto py-8">
         <!-- About the Project Section -->
         <section class="mb-8">
-            <h2 class="text-3xl font-semibold text-text-primary dark:text-text-secondary mb-4">About the Project</h2>
+            <h2 class="text-3xl font-semibold text-text-primary dark:text-text-secondary mb-4">{{ _('About the Project') }}</h2>
             <p class="text-text-secondary dark:text-text-tertiary">
-                The Algerian Renewable Energy Atlas is a comprehensive digital platform designed to map, quantify, and visualize Algeria's renewable energy potential, specifically focusing on solar, wind, and green hydrogen resources. The platform aims to provide a comprehensive, accessible, and interactive resource for stakeholders interested in exploring and developing renewable energy projects in Algeria.
+                {{ _('The Algerian Renewable Energy Atlas is a comprehensive digital platform designed to map, quantify, and visualize Algeria\'s renewable energy potential, specifically focusing on solar, wind, and green hydrogen resources. The platform aims to provide a comprehensive, accessible, and interactive resource for stakeholders interested in exploring and developing renewable energy projects in Algeria.') }}
             </p>
         </section>
 
         <!-- Renewable Energy in Algeria Context Section -->
         <section class="mb-8">
-            <h2 class="text-3xl font-semibold text-text-primary dark:text-text-secondary mb-4">Renewable Energy in Algeria Context</h2>
+            <h2 class="text-3xl font-semibold text-text-primary dark:text-text-secondary mb-4">{{ _('Renewable Energy in Algeria Context') }}</h2>
             <p class="text-text-secondary dark:text-text-tertiary">
-                Algeria possesses significant renewable energy potential, particularly in solar and wind resources. This section highlights the importance of transitioning to renewable energy sources to meet growing energy demands, reduce carbon emissions, and promote sustainable development.
+                {{ _('Algeria possesses significant renewable energy potential, particularly in solar and wind resources. This section highlights the importance of transitioning to renewable energy sources to meet growing energy demands, reduce carbon emissions, and promote sustainable development.') }}
             </p>
-            <!-- Add visual elements here (icons or images) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-6">
+                <div class="text-center p-6 bg-background-secondary dark:bg-background-tertiary rounded-lg">
+                    <i class="fas fa-sun text-4xl text-primary mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">{{ _('Solar Potential') }}</h3>
+                    <p>{{ _('One of the highest solar potentials globally') }}</p>
+                </div>
+                <div class="text-center p-6 bg-background-secondary dark:bg-background-tertiary rounded-lg">
+                    <i class="fas fa-wind text-4xl text-secondary mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">{{ _('Wind Resources') }}</h3>
+                    <p>{{ _('Significant wind energy potential in coastal and highland regions') }}</p>
+                </div>
+                <div class="text-center p-6 bg-background-secondary dark:bg-background-tertiary rounded-lg">
+                    <i class="fas fa-bolt text-4xl text-tertiary mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">{{ _('Green Hydrogen') }}</h3>
+                    <p>{{ _('Emerging opportunities in green hydrogen production') }}</p>
+                </div>
+            </div>
         </section>
 
         <!-- Data and Methodology Section -->
         <section class="mb-8">
-            <h2 class="text-3xl font-semibold text-text-primary dark:text-text-secondary mb-4">Data and Methodology</h2>
-            <p class="text-text-secondary dark:text-text-tertiary">
-                The data presented in this atlas is sourced from reputable sources and undergoes rigorous scientific validation. Our methodology combines geospatial data, scientific measurements, and AI-powered predictive models to provide accurate and reliable assessments of renewable energy potential.
+            <h2 class="text-3xl font-semibold text-text-primary dark:text-text-secondary mb-4">{{ _('Data and Methodology') }}</h2>
+            <p class="text-text-secondary dark:text-text-tertiary mb-4">
+                {{ _('The data presented in this atlas is sourced from reputable sources and undergoes rigorous scientific validation. Our methodology combines geospatial data, scientific measurements, and AI-powered predictive models to provide accurate and reliable assessments of renewable energy potential.') }}
             </p>
-            <ul>
-                <li>Data Sources: NASA, OpenStreetMap, Algerian Meteorological Office</li>
-                <li>Methodology: Geospatial analysis, machine learning, statistical modeling</li>
-                <li>Validation: Peer review, cross-validation, sensitivity analysis</li>
-            </ul>
+            <div class="bg-background-secondary dark:bg-background-tertiary p-6 rounded-lg">
+                <h3 class="text-xl font-semibold mb-4">{{ _('Our Sources & Methods') }}</h3>
+                <ul class="list-disc list-inside space-y-2 text-text-secondary dark:text-text-tertiary">
+                    <li>{{ _('Data Sources: NASA, OpenStreetMap, Algerian Meteorological Office') }}</li>
+                    <li>{{ _('Methodology: Geospatial analysis, machine learning, statistical modeling') }}</li>
+                    <li>{{ _('Validation: Peer review, cross-validation, sensitivity analysis') }}</li>
+                </ul>
+            </div>
         </section>
 
         <!-- Technical FAQs Section -->
         <section class="mb-8">
-            <h2 class="text-3xl font-semibold text-text-primary dark:text-text-secondary mb-4">Technical FAQs</h2>
-            <div class="accordion">
-                <!-- FAQ items will be added here using JavaScript -->
-                <details>
-                    <summary>What is the resolution of the data?</summary>
-                    <p class="text-text-secondary dark:text-text-tertiary">The data is available at a spatial resolution of 1km x 1km.</p>
+            <h2 class="text-3xl font-semibold text-text-primary dark:text-text-secondary mb-4">{{ _('Technical FAQs') }}</h2>
+            <div class="space-y-4">
+                <details class="bg-background-secondary dark:bg-background-tertiary p-4 rounded-lg">
+                    <summary class="font-semibold cursor-pointer">{{ _('What is the resolution of the data?') }}</summary>
+                    <p class="mt-2 text-text-secondary dark:text-text-tertiary">{{ _('The data is available at a spatial resolution of 1km x 1km.') }}</p>
                 </details>
-                <details>
-                    <summary>How often is the data updated?</summary>
-                    <p class="text-text-secondary dark:text-text-tertiary">The data is updated annually.</p>
+                <details class="bg-background-secondary dark:bg-background-tertiary p-4 rounded-lg">
+                    <summary class="font-semibold cursor-pointer">{{ _('How often is the data updated?') }}</summary>
+                    <p class="mt-2 text-text-secondary dark:text-text-tertiary">{{ _('The data is updated annually.') }}</p>
                 </details>
             </div>
         </section>
 
         <!-- Contact Us Section -->
         <section class="mb-8">
-            <h2 class="text-3xl font-semibold text-text-primary dark:text-text-secondary mb-4">Contact Us</h2>
+            <h2 class="text-3xl font-semibold text-text-primary dark:text-text-secondary mb-4">{{ _('Contact Us') }}</h2>
             <p class="text-text-secondary dark:text-text-tertiary">
-                For inquiries and feedback, please contact us at:
+                {{ _('For inquiries and feedback, please contact us at:') }}
             </p>
             <p class="text-text-secondary dark:text-text-tertiary">
-                Email: contact@example.com
+                {{ _('Email:') }} <a href="mailto:contact@example.com" class="text-primary hover:text-primary-light">contact@example.com</a>
             </p>
         </section>
 
         <!-- Credits and Acknowledgements Section -->
         <section>
-            <h2 class="text-3xl font-semibold text-text-primary dark:text-text-secondary mb-4">Credits and Acknowledgements</h2>
-            <p class="text-text-secondary dark:text-text-tertiary">
-                The Algerian Renewable Energy Atlas is made possible by the contributions of various data providers, partners, and contributors. We would like to express our gratitude to:
+            <h2 class="text-3xl font-semibold text-text-primary dark:text-text-secondary mb-4">{{ _('Credits and Acknowledgements') }}</h2>
+            <p class="text-text-secondary dark:text-text-tertiary mb-4">
+                {{ _('The Algerian Renewable Energy Atlas is made possible by the contributions of various data providers, partners, and contributors. We would like to express our gratitude to:') }}
             </p>
-            <ul>
+            <ul class="list-disc list-inside space-y-2 text-text-secondary dark:text-text-tertiary">
                 <li>NASA</li>
                 <li>OpenStreetMap</li>
-                <li>Algerian Meteorological Office</li>
+                <li>{{ _('Algerian Meteorological Office') }}</li>
             </ul>
         </section>
     </div>
+{% endblock %}
+
+{% block body_js %}
+<script>
+    // Add smooth animation for FAQ details
+    document.querySelectorAll('details').forEach((detail) => {
+        detail.addEventListener('toggle', (e) => {
+            if (detail.open) {
+                detail.classList.add('animate-fade-in');
+            }
+        });
+    });
+</script>
 {% endblock %}
