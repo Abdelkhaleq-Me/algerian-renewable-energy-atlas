@@ -3,3 +3,202 @@
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
 }
+
+/* Global Styles */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+    margin: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Map Styles */
+#map {
+    height: 600px;
+    width: 100%;
+    border-radius: 0.5rem;
+}
+
+/* Floating Controls */
+.floating-controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 300px;
+    z-index: 1000;
+    background: var(--color-background-primary);
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s ease-in-out;
+}
+
+.floating-controls .control-section {
+    padding: 1rem;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-background-primary);
+}
+
+.floating-controls .control-section:last-child {
+    border-bottom: none;
+}
+
+.floating-controls .control-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.floating-controls .control-content {
+    margin-top: 0.5rem;
+    transition: all 0.3s ease-in-out;
+}
+
+.control-minimize {
+    transition: transform 0.2s;
+}
+
+.control-minimize.minimized {
+    transform: rotate(-180deg);
+}
+
+/* Dark mode adjustments for floating controls */
+[data-theme="dark"] .floating-controls .control-section {
+    background: var(--color-background-secondary);
+}
+
+/* Hover effects for controls */
+.floating-controls .control-header:hover {
+    opacity: 0.9;
+}
+
+/* Mobile responsiveness for controls */
+@media (max-width: 640px) {
+    .floating-controls {
+        width: calc(100% - 40px);
+        max-width: 300px;
+    }
+}
+
+/* Transitions */
+.transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-background-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-text-tertiary);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-secondary);
+}
+
+/* Mobile Navigation */
+@media (max-width: 768px) {
+    .mobile-nav-open {
+        display: block;
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--color-background-primary);
+        padding: 1rem;
+        z-index: 40;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* RTL Support for Arabic */
+[dir="rtl"] {
+    text-align: right;
+}
+
+[dir="rtl"] .ml-2 {
+    margin-left: 0;
+    margin-right: 0.5rem;
+}
+
+[dir="rtl"] .mr-2 {
+    margin-right: 0;
+    margin-left: 0.5rem;
+}
+
+/* Accessibility */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Form Elements */
+input:focus, 
+button:focus, 
+a:focus {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+}
+
+/* Loading States */
+.loading {
+    position: relative;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,60 +1,87 @@
 :root {
-    /* Light Theme (Default) */
-    --color-primary: #F5A623;
-    --color-primary-light: #FFD152;
-    --color-primary-dark: #D68C00;
+    /* Light Theme Colors */
+    --color-primary: #2563eb;
+    --color-primary-light: #3b82f6;
+    --color-primary-dark: #1d4ed8;
     
-    --color-secondary: #3498DB;
-    --color-secondary-light: #64B1F3;
-    --color-secondary-dark: #1C6EA4;
+    --color-secondary: #059669;
+    --color-secondary-light: #10b981;
+    --color-secondary-dark: #047857;
     
-    --color-tertiary: #2ECC71;
-    --color-tertiary-light: #58D88A;
-    --color-tertiary-dark: #1EA056;
+    --color-tertiary: #7c3aed;
+    --color-tertiary-light: #8b5cf6;
+    --color-tertiary-dark: #6d28d9;
     
-    --color-background-primary: #FFFFFF;
-    --color-background-secondary: #F7F9FA;
-    --color-background-tertiary: #EDF2F7;
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f3f4f6;
+    --color-background-tertiary: #e5e7eb;
     
-    --color-text-primary: #1A202C;
-    --color-text-secondary: #4A5568;
-    --color-text-tertiary: #718096;
+    --color-text-primary: #111827;
+    --color-text-secondary: #374151;
+    --color-text-tertiary: #6b7280;
     
-    --color-border: #CBD5E0;
-    --color-divider: #E2E8F0;
+    --color-border: #e5e7eb;
+    --color-border-focus: #3b82f6;
+}
+
+/* Dark Theme Colors */
+[data-theme="dark"] {
+    --color-primary: #3b82f6;
+    --color-primary-light: #60a5fa;
+    --color-primary-dark: #2563eb;
     
-    --color-success: #28A745;
-    --color-warning: #FFC107;
-    --color-error: #DC3545;
-    --color-info: #17A2B8;
-  }
-  
-  [data-theme="dark"] {
-    --color-primary: #FFCC29;
-    --color-primary-light: #FFE580;
-    --color-primary-dark: #D6A700;
+    --color-secondary: #10b981;
+    --color-secondary-light: #34d399;
+    --color-secondary-dark: #059669;
     
-    --color-secondary: #4DADFF;
-    --color-secondary-light: #9FD3FF;
-    --color-secondary-dark: #0077CC;
+    --color-tertiary: #8b5cf6;
+    --color-tertiary-light: #a78bfa;
+    --color-tertiary-dark: #7c3aed;
     
-    --color-tertiary: #41E296;
-    --color-tertiary-light: #79F9BD;
-    --color-tertiary-dark: #1AA053;
+    --color-background-primary: #111827;
+    --color-background-secondary: #1f2937;
+    --color-background-tertiary: #374151;
     
-    --color-background-primary: #121212;
-    --color-background-secondary: #1E1E1E;
-    --color-background-tertiary: #2D2D2D;
+    --color-text-primary: #f9fafb;
+    --color-text-secondary: #e5e7eb;
+    --color-text-tertiary: #d1d5db;
     
-    --color-text-primary: #F7FAFC;
-    --color-text-secondary: #CBD5E0;
-    --color-text-tertiary: #A0AEC0;
-    
-    --color-border: #4A5568;
-    --color-divider: #2D2D2D;
-    
-    --color-success: #4CD964;
-    --color-warning: #FFCC00;
-    --color-error: #FF3B30;
-    --color-info: #34AADC;
-  }
+    --color-border: #374151;
+    --color-border-focus: #60a5fa;
+}
+
+/* Tailwind CSS Custom Colors */
+.bg-primary { background-color: var(--color-primary); }
+.bg-primary-light { background-color: var(--color-primary-light); }
+.bg-primary-dark { background-color: var(--color-primary-dark); }
+
+.bg-secondary { background-color: var(--color-secondary); }
+.bg-secondary-light { background-color: var(--color-secondary-light); }
+.bg-secondary-dark { background-color: var(--color-secondary-dark); }
+
+.bg-tertiary { background-color: var(--color-tertiary); }
+.bg-tertiary-light { background-color: var(--color-tertiary-light); }
+.bg-tertiary-dark { background-color: var(--color-tertiary-dark); }
+
+.bg-background-primary { background-color: var(--color-background-primary); }
+.bg-background-secondary { background-color: var(--color-background-secondary); }
+.bg-background-tertiary { background-color: var(--color-background-tertiary); }
+
+.text-primary { color: var(--color-primary); }
+.text-primary-light { color: var(--color-primary-light); }
+.text-primary-dark { color: var(--color-primary-dark); }
+
+.text-secondary { color: var(--color-secondary); }
+.text-secondary-light { color: var(--color-secondary-light); }
+.text-secondary-dark { color: var(--color-secondary-dark); }
+
+.text-tertiary { color: var(--color-tertiary); }
+.text-tertiary-light { color: var(--color-tertiary-light); }
+.text-tertiary-dark { color: var(--color-tertiary-dark); }
+
+.text-text-primary { color: var(--color-text-primary); }
+.text-text-secondary { color: var(--color-text-secondary); }
+.text-text-tertiary { color: var(--color-text-tertiary); }
+
+.border-color-border { border-color: var(--color-border); }
+.focus\:border-color-focus:focus { border-color: var(--color-border-focus); }

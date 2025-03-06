@@ -6,83 +6,123 @@
 <div class="container mx-auto py-8">
     <!-- Download Datasets Section -->
     <section class="mb-8">
-        <h2 class="text-3xl font-semibold text-text-primary dark:text-text-secondary mb-4">Download Datasets</h2>
-        <p class="text-text-secondary dark:text-text-tertiary mb-2">Select the desired filters to download datasets:</p>
-        <form method="GET" action="/download/dataset" class="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-4">
+        <h2 class="text-3xl font-semibold text-text-primary dark:text-text-secondary mb-4">{{ _('Download Datasets') }}</h2>
+        <p class="text-text-secondary dark:text-text-tertiary mb-2">{{ _('Select the desired filters to download datasets:') }}</p>
+        <form method="GET" action="{{ url_for('download.get_dataset') }}" class="space-y-6 md:space-y-0 md:grid md:grid-cols-4 md:gap-6">
             <!-- Energy Type Filter -->
-            <div>
-                <label for="energyType" class="block text-text-primary dark:text-text-secondary text-sm font-bold mb-2">Energy Type:</label>
-                <select id="energyType" name="energyType" class="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary dark:text-text-secondary leading-tight focus:outline-none focus:shadow-outline bg-background-primary dark:bg-background-secondary">
-                    <option value="solar">Solar</option>
-                    <option value="wind">Wind</option>
-                    <option value="green_hydrogen">Green Hydrogen</option>
+            <div class="bg-background-secondary dark:bg-background-tertiary p-4 rounded-lg">
+                <label for="energyType" class="block text-text-primary dark:text-text-secondary text-sm font-bold mb-2">{{ _('Energy Type:') }}</label>
+                <select id="energyType" name="energyType" class="w-full p-2 rounded-md border border-color-border dark:border-color-border bg-background-primary dark:bg-background-secondary text-text-primary dark:text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary">
+                    <option value="solar">{{ _('Solar') }}</option>
+                    <option value="wind">{{ _('Wind') }}</option>
+                    <option value="green_hydrogen">{{ _('Green Hydrogen') }}</option>
                 </select>
             </div>
 
             <!-- Region Filter -->
-            <div>
-                <label for="region" class="block text-text-primary dark:text-text-secondary text-sm font-bold mb-2">Region (Welaya):</label>
-                <select id="region" name="region" class="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary dark:text-text-secondary leading-tight focus:outline-none focus:shadow-outline bg-background-primary dark:bg-background-secondary">
-                    <option value="">Select Region</option>
-                    <!-- Options populated dynamically -->
+            <div class="bg-background-secondary dark:bg-background-tertiary p-4 rounded-lg">
+                <label for="region" class="block text-text-primary dark:text-text-secondary text-sm font-bold mb-2">{{ _('Region (Wilaya):') }}</label>
+                <select id="region" name="region" class="w-full p-2 rounded-md border border-color-border dark:border-color-border bg-background-primary dark:bg-background-secondary text-text-primary dark:text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary">
+                    <option value="">{{ _('Select Region') }}</option>
+                    <!-- Options will be populated dynamically -->
                 </select>
             </div>
 
             <!-- Dataset Format Filter -->
-            <div>
-                <label for="format" class="block text-text-primary dark:text-text-secondary text-sm font-bold mb-2">Format:</label>
-                <select id="format" name="format" class="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary dark:text-text-secondary leading-tight focus:outline-none focus:shadow-outline bg-background-primary dark:bg-background-secondary">
+            <div class="bg-background-secondary dark:bg-background-tertiary p-4 rounded-lg">
+                <label for="format" class="block text-text-primary dark:text-text-secondary text-sm font-bold mb-2">{{ _('Format:') }}</label>
+                <select id="format" name="format" class="w-full p-2 rounded-md border border-color-border dark:border-color-border bg-background-primary dark:bg-background-secondary text-text-primary dark:text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary">
                     <option value="csv">CSV</option>
                     <option value="geojson">GeoJSON</option>
                 </select>
             </div>
 
             <!-- Download Button -->
-            <div>
-                <button type="submit" class="bg-primary hover:bg-primary-light text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">
-                    Download Dataset
+            <div class="bg-background-secondary dark:bg-background-tertiary p-4 rounded-lg flex items-end">
+                <button type="submit" class="w-full bg-primary hover:bg-primary-light text-white font-bold py-2 px-4 rounded-md transition duration-300 flex items-center justify-center">
+                    <i class="fas fa-download mr-2"></i>
+                    {{ _('Download Dataset') }}
                 </button>
             </div>
         </form>
-        <p class="text-text-secondary dark:text-text-tertiary mt-4">Apply filters to narrow down the dataset and select the desired format before downloading.</p>
+        <p class="text-text-secondary dark:text-text-tertiary mt-4">
+            {{ _('Apply filters to narrow down the dataset and select the desired format before downloading.') }}
+        </p>
     </section>
 
     <!-- Generate Report Section -->
     <section>
-        <h2 class="text-3xl font-semibold text-text-primary dark:text-text-secondary mb-4">Generate Report</h2>
-        <p class="text-text-secondary dark:text-text-tertiary mb-2">Select the desired filters to generate a report:</p>
-        <form method="GET" action="/download/report" class="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-4">
+        <h2 class="text-3xl font-semibold text-text-primary dark:text-text-secondary mb-4">{{ _('Generate Report') }}</h2>
+        <p class="text-text-secondary dark:text-text-tertiary mb-2">{{ _('Select the desired filters to generate a report:') }}</p>
+        <form method="GET" action="{{ url_for('download.generate_report') }}" class="space-y-6 md:space-y-0 md:grid md:grid-cols-3 md:gap-6">
             <!-- Energy Type Filter -->
-            <div>
-                <label for="reportEnergyType" class="block text-text-primary dark:text-text-secondary text-sm font-bold mb-2">Energy Type:</label>
-                <select id="reportEnergyType" name="energyType" class="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary dark:text-text-secondary leading-tight focus:outline-none focus:shadow-outline bg-background-primary dark:bg-background-secondary">
-                    <option value="solar">Solar</option>
-                    <option value="wind">Wind</option>
-                    <option value="green_hydrogen">Green Hydrogen</option>
+            <div class="bg-background-secondary dark:bg-background-tertiary p-4 rounded-lg">
+                <label for="reportEnergyType" class="block text-text-primary dark:text-text-secondary text-sm font-bold mb-2">{{ _('Energy Type:') }}</label>
+                <select id="reportEnergyType" name="energyType" class="w-full p-2 rounded-md border border-color-border dark:border-color-border bg-background-primary dark:bg-background-secondary text-text-primary dark:text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary">
+                    <option value="solar">{{ _('Solar') }}</option>
+                    <option value="wind">{{ _('Wind') }}</option>
+                    <option value="green_hydrogen">{{ _('Green Hydrogen') }}</option>
                 </select>
             </div>
 
             <!-- Region Filter -->
-            <div>
-                <label for="reportRegion" class="block text-text-primary dark:text-text-secondary text-sm font-bold mb-2">Region (Welaya):</label>
-                <select id="reportRegion" name="region" class="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary dark:text-text-secondary leading-tight focus:outline-none focus:shadow-outline bg-background-primary dark:bg-background-secondary">
-                    <option value="">Select Region</option>
-                    <!-- Options populated dynamically -->
+            <div class="bg-background-secondary dark:bg-background-tertiary p-4 rounded-lg">
+                <label for="reportRegion" class="block text-text-primary dark:text-text-secondary text-sm font-bold mb-2">{{ _('Region (Wilaya):') }}</label>
+                <select id="reportRegion" name="region" class="w-full p-2 rounded-md border border-color-border dark:border-color-border bg-background-primary dark:bg-background-secondary text-text-primary dark:text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary">
+                    <option value="">{{ _('Select Region') }}</option>
+                    <!-- Options will be populated dynamically -->
                 </select>
             </div>
 
             <!-- Generate Report Button -->
-            <div>
-                <button type="submit" class="bg-secondary hover:bg-secondary-light text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">
-                    Generate Report
+            <div class="bg-background-secondary dark:bg-background-tertiary p-4 rounded-lg flex items-end">
+                <button type="submit" class="w-full bg-secondary hover:bg-secondary-light text-white font-bold py-2 px-4 rounded-md transition duration-300 flex items-center justify-center">
+                    <i class="fas fa-file-pdf mr-2"></i>
+                    {{ _('Generate Report') }}
                 </button>
             </div>
         </form>
-        <p class="text-text-secondary dark:text-text-tertiary mt-4">Apply filters to specify the report content and initiate the report generation process.</p>
+        <p class="text-text-secondary dark:text-text-tertiary mt-4">
+            {{ _('Apply filters to specify the report content and initiate the report generation process.') }}
+        </p>
+
         <!-- Download Report Link (Hidden initially) -->
-        <div id="reportDownloadLink" class="hidden mt-4">
-            <a href="#" class="text-blue-500 hover:text-blue-700">Download Report</a>
+        <div id="reportDownloadLink" class="hidden mt-4 p-4 bg-background-secondary dark:bg-background-tertiary rounded-lg">
+            <a href="#" class="text-primary hover:text-primary-light flex items-center">
+                <i class="fas fa-file-download mr-2"></i>
+                {{ _('Download Report') }}
+            </a>
         </div>
     </section>
 </div>
+{% endblock %}
+
+{% block body_js %}
+<script>
+    // Function to populate region dropdowns
+    async function populateRegions() {
+        try {
+            const response = await fetch("{{ url_for('api.get_regions') }}");
+            const regions = await response.json();
+            
+            const regionSelects = ['region', 'reportRegion'];
+            regionSelects.forEach(selectId => {
+                const select = document.getElementById(selectId);
+                regions.forEach(region => {
+                    const option = document.createElement('option');
+                    option.value = region.id;
+                    option.textContent = region.name;
+                    select.appendChild(option);
+                });
+            });
+        } catch (error) {
+            console.error('Error loading regions:', error);
+        }
+    }
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', () => {
+        populateRegions();
+    });
+</script>
 {% endblock %}

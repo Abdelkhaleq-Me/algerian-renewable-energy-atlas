@@ -4,8 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Algerian Renewable Energy Atlas{% endblock %}</title>
-    <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png">
+    <!-- Update favicon link tags -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <!-- For modern browsers -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicon-16x16.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     {% block head_css %}{% endblock %}
@@ -15,17 +21,17 @@
     <header class="bg-background-secondary dark:bg-background-tertiary shadow-md sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
             <div class="logo">
-                <a href="{{ url_for('home') }}" class="flex items-center">
+                <a href="{{ url_for('home.index') }}" class="flex items-center">
                     <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Algerian Renewable Energy Atlas Logo" class="h-8 w-auto mr-2">
                     <span class="font-bold text-xl">ARE Atlas</span>
                 </a>
             </div>
             <nav class="main-nav">
                 <ul class="hidden md:flex space-x-6">
-                    <li><a href="{{ url_for('home') }}" class="hover:text-primary dark:hover:text-primary-light transition-colors duration-200">{{ _('Home') }}</a></li>
-                    <li><a href="{{ url_for('atlas') }}" class="hover:text-primary dark:hover:text-primary-light transition-colors duration-200">{{ _('Atlas') }}</a></li>
-                    <li><a href="{{ url_for('download') }}" class="hover:text-primary dark:hover:text-primary-light transition-colors duration-200">{{ _('Download') }}</a></li>
-                    <li><a href="{{ url_for('about') }}" class="hover:text-primary dark:hover:text-primary-light transition-colors duration-200">{{ _('About') }}</a></li>
+                    <li><a href="{{ url_for('home.index') }}" class="hover:text-primary dark:hover:text-primary-light transition-colors duration-200">{{ _('Home') }}</a></li>
+                    <li><a href="{{ url_for('atlas.index') }}" class="hover:text-primary dark:hover:text-primary-light transition-colors duration-200">{{ _('Atlas') }}</a></li>
+                    <li><a href="{{ url_for('download.index') }}" class="hover:text-primary dark:hover:text-primary-light transition-colors duration-200">{{ _('Download') }}</a></li>
+                    <li><a href="{{ url_for('about.index') }}" class="hover:text-primary dark:hover:text-primary-light transition-colors duration-200">{{ _('About') }}</a></li>
                 </ul>
             </nav>
             <div class="header-actions flex items-center space-x-4">
@@ -39,9 +45,9 @@
                     </button>
                     <div id="lang-dropdown" class="hidden absolute right-0 mt-2 w-32 rounded-md shadow-lg bg-background-primary dark:bg-background-secondary ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="lang-button" tabindex="-1">
                         <div class="py-1" role="none">
-                            <a href="{{ url_for(request.endpoint, **request.view_args, lang='en') }}" class="block px-4 py-2 text-sm text-text-primary dark:text-text-secondary hover:bg-background-tertiary dark:hover:bg-background-tertiary" role="menuitem" tabindex="-1" id="lang-option-english">English</a>
-                            <a href="{{ url_for(request.endpoint, **request.view_args, lang='fr') }}" class="block px-4 py-2 text-sm text-text-primary dark:text-text-secondary hover:bg-background-tertiary dark:hover:bg-background-tertiary" role="menuitem" tabindex="-1" id="lang-option-french">Français</a>
-                            <a href="{{ url_for(request.endpoint, **request.view_args, lang='ar') }}" class="block px-4 py-2 text-sm text-text-primary dark:text-text-secondary hover:bg-background-tertiary dark:hover:bg-background-tertiary" role="menuitem" tabindex="-1" id="lang-option-arabic">العربية</a>
+                            <a href="{{ url_for(request.endpoint, lang='en') if request.endpoint else url_for('home.index', lang='en') }}" class="block px-4 py-2 text-sm text-text-primary dark:text-text-secondary hover:bg-background-tertiary dark:hover:bg-background-tertiary" role="menuitem" tabindex="-1" id="lang-option-english">English</a>
+                            <a href="{{ url_for(request.endpoint, lang='fr') if request.endpoint else url_for('home.index', lang='fr') }}" class="block px-4 py-2 text-sm text-text-primary dark:text-text-secondary hover:bg-background-tertiary dark:hover:bg-background-tertiary" role="menuitem" tabindex="-1" id="lang-option-french">Français</a>
+                            <a href="{{ url_for(request.endpoint, lang='ar') if request.endpoint else url_for('home.index', lang='ar') }}" class="block px-4 py-2 text-sm text-text-primary dark:text-text-secondary hover:bg-background-tertiary dark:hover:bg-background-tertiary" role="menuitem" tabindex="-1" id="lang-option-arabic">العربية</a>
                         </div>
                     </div>
                 </div>
@@ -52,7 +58,7 @@
             </div>
         </div>
     </header>
-    <main class="container mx-auto px-4 py-8">
+    <main class="container px-4 py-8">
         {% block content %}{% endblock %}
     </main>
     <footer class="bg-background-secondary dark:bg-background-tertiary border-t border-color-border dark:border-color-border py-6">
@@ -60,8 +66,8 @@
             <div class="footer-nav mb-4">
                 <a href="#" class="hover:text-primary dark:hover:text-primary-light px-2">{{ _('Privacy Policy') }}</a>
                 <a href="#" class="hover:text-primary dark:hover:text-primary-light px-2">{{ _('Terms of Use') }}</a>
-                <a href="{{ url_for('about') }}" class="hover:text-primary dark:hover:text-primary-light px-2">{{ _('About') }}</a>
-                <a href="{{ url_for('contact') }}" class="hover:text-primary dark:hover:text-primary-light px-2">{{ _('Contact Us') }}</a>
+                <a href="{{ url_for('about.index') }}" class="hover:text-primary dark:hover:text-primary-light px-2">{{ _('About') }}</a>
+                <a href="{{ url_for('contact.index') }}" class="hover:text-primary dark:hover:text-primary-light px-2">{{ _('Contact Us') }}</a>
             </div>
             <div class="social-links mb-4">
                 <a href="#" class="hover:text-primary dark:hover:text-primary-light px-2"><i class="fab fa-facebook"></i></a>

@@ -2,73 +2,94 @@
 
 {% block title %}Atlas - Algerian Renewable Energy Atlas{% endblock %}
 
+{% block head_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+{% endblock %}
+
 {% block content %}
 <div class="container mx-auto py-8">
-    <h1 class="text-3xl font-semibold text-text-primary dark:text-text-secondary mb-4">Interactive Atlas</h1>
     <div class="flex flex-col md:flex-row">
         <!-- Left Panel: Interactive Map -->
         <div class="w-full md:w-1/2 p-4">
             <!-- Map Container -->
-            <div id="mapContainer" class="relative h-[500px] mb-4">
+            <div id="mapContainer" class="relative h-[600px] mb-4">
                 <!-- Leaflet map will be rendered here -->
                 <div id="map" class="z-10 h-full w-full"></div>
 
+                <!-- Floating Controls -->
+                <div class="floating-controls">
+                    <!-- Layer Control -->
+                    <div class="control-section">
+                        <div class="control-header" onclick="toggleSection('layerControl')">
+                            <h3 class="text-lg font-semibold text-text-primary dark:text-text-secondary">{{ _('Layer Control') }}</h3>
+                            <svg class="control-minimize w-4 h-4 text-text-primary dark:text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                        <div id="layerControlContent" class="control-content">
+                            <div class="flex flex-col space-y-2">
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" class="form-checkbox h-5 w-5 text-primary" id="solarLayerToggle">
+                                    <span class="ml-2 text-text-primary dark:text-text-secondary">{{ _('Solar Irradiance') }}</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" class="form-checkbox h-5 w-5 text-secondary" id="windLayerToggle">
+                                    <span class="ml-2 text-text-primary dark:text-text-secondary">{{ _('Wind Speed') }}</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" class="form-checkbox h-5 w-5 text-tertiary" id="greenHydrogenLayerToggle">
+                                    <span class="ml-2 text-text-primary dark:text-text-secondary">{{ _('Green Hydrogen Potential') }}</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filter Controls -->
+                    <div class="control-section">
+                        <div class="control-header" onclick="toggleSection('filterControls')">
+                            <h3 class="text-lg font-semibold text-text-primary dark:text-text-secondary">{{ _('Filter Controls') }}</h3>
+                            <svg class="control-minimize w-4 h-4 text-text-primary dark:text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </div>
+                        <div id="filterControlsContent" class="control-content">
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="energyTypeFilter" class="block text-text-primary dark:text-text-secondary text-sm font-medium mb-1">{{ _('Energy Type:') }}</label>
+                                    <select id="energyTypeFilter" class="w-full p-2 rounded-md border border-color-border dark:border-color-border bg-background-primary dark:bg-background-secondary text-text-primary dark:text-text-secondary">
+                                        <option value="">{{ _('All') }}</option>
+                                        <option value="solar">{{ _('Solar') }}</option>
+                                        <option value="wind">{{ _('Wind') }}</option>
+                                        <option value="green_hydrogen">{{ _('Green Hydrogen') }}</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="searchBar" class="block text-text-primary dark:text-text-secondary text-sm font-medium mb-1">{{ _('Search:') }}</label>
+                                    <input type="text" id="searchBar" placeholder="{{ _('Region, coordinates...') }}" class="w-full p-2 rounded-md border border-color-border dark:border-color-border bg-background-primary dark:bg-background-secondary text-text-primary dark:text-text-secondary">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Loading Indicator -->
                 <div id="mapLoadingIndicator" class="absolute bottom-0 left-0 w-full bg-background-secondary dark:bg-background-tertiary text-text-primary dark:text-text-secondary text-center py-2 z-20">
-                    Loading data...
-                </div>
-            </div>
-
-            <!-- Layer Control -->
-            <div id="layerControl" class="mb-4">
-                <h3 class="text-xl font-semibold text-text-primary dark:text-text-secondary mb-2">Layer Control</h3>
-                <div class="flex flex-col">
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" class="form-checkbox h-5 w-5 text-primary" id="solarLayerToggle">
-                        <span class="ml-2 text-text-primary dark:text-text-secondary">Solar Irradiance</span>
-                    </label>
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" class="form-checkbox h-5 w-5 text-secondary" id="windLayerToggle">
-                        <span class="ml-2 text-text-primary dark:text-text-secondary">Wind Speed</span>
-                    </label>
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" class="form-checkbox h-5 w-5 text-tertiary" id="greenHydrogenLayerToggle">
-                        <span class="ml-2 text-text-primary dark:text-text-secondary">Green Hydrogen Potential</span>
-                    </label>
-                </div>
-            </div>
-
-            <!-- Filter Controls -->
-            <div id="filterControls">
-                <h3 class="text-xl font-semibold text-text-primary dark:text-text-secondary mb-2">Filter Controls</h3>
-                <div class="mb-2">
-                    <label for="energyTypeFilter" class="block text-text-primary dark:text-text-secondary text-sm font-bold mb-2">Energy Type:</label>
-                    <select id="energyTypeFilter" class="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary dark:text-text-secondary leading-tight focus:outline-none focus:shadow-outline bg-background-primary dark:bg-background-secondary">
-                        <option value="">All</option>
-                        <option value="solar">Solar</option>
-                        <option value="wind">Wind</option>
-                        <option value="green_hydrogen">Green Hydrogen</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="searchBar" class="block text-text-primary dark:text-text-secondary text-sm font-bold mb-2">Search:</label>
-                    <input type="text" id="searchBar" placeholder="Region, coordinates..." class="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary dark:text-text-secondary leading-tight focus:outline-none focus:shadow-outline bg-background-primary dark:bg-background-secondary">
+                    {{ _('Loading data...') }}
                 </div>
             </div>
         </div>
 
         <!-- Right Panel: Dashboard & Data Visualizations -->
         <div class="w-full md:w-1/2 p-4">
-            <h2 class="text-2xl font-semibold text-text-primary dark:text-text-secondary mb-2">Dashboard</h2>
             <div id="dashboard">
                 <!-- Wilaya Overview Block -->
                 <div id="wilayaOverview" class="mb-4">
-                    <h3 class="text-xl font-semibold text-text-primary dark:text-text-secondary mb-2">Wilaya Overview</h3>
-                    <p class="text-text-secondary dark:text-text-tertiary">Select a region to view detailed information.</p>
+                    <h3 class="text-xl font-semibold text-text-primary dark:text-text-secondary mb-2">{{ _('Wilaya Overview') }}</h3>
+                    <p class="text-text-secondary dark:text-text-tertiary">{{ _('Select a region to view detailed information.') }}</p>
                     <!-- Region Selector (Dropdown) -->
                     <select id="regionSelector" class="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary dark:text-text-secondary leading-tight focus:outline-none focus:shadow-outline bg-background-primary dark:bg-background-secondary">
-                        <option value="">Select Region</option>
-                        <!-- Options will be populated dynamically using JavaScript -->
+                        <option value="">{{ _('Select Region') }}</option>
+                        <!-- Options will be populated dynamically -->
                     </select>
                 </div>
 
@@ -76,41 +97,58 @@
                 <div id="statsCards" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                     <!-- Solar Potential -->
                     <div class="bg-background-secondary dark:bg-background-tertiary rounded-lg shadow-md p-4">
-                        <h4 class="text-lg font-semibold text-text-primary dark:text-text-secondary mb-2">Solar Potential</h4>
-                        <p class="text-text-secondary dark:text-text-tertiary">Data not available</p>
+                        <h4 class="text-lg font-semibold text-text-primary dark:text-text-secondary mb-2">{{ _('Solar Potential') }}</h4>
+                        <p class="text-text-secondary dark:text-text-tertiary">{{ _('Data not available') }}</p>
                     </div>
                     <!-- Wind Speed -->
                     <div class="bg-background-secondary dark:bg-background-tertiary rounded-lg shadow-md p-4">
-                        <h4 class="text-lg font-semibold text-text-primary dark:text-text-secondary mb-2">Wind Speed</h4>
-                        <p class="text-text-secondary dark:text-text-tertiary">Data not available</p>
+                        <h4 class="text-lg font-semibold text-text-primary dark:text-text-secondary mb-2">{{ _('Wind Speed') }}</h4>
+                        <p class="text-text-secondary dark:text-text-tertiary">{{ _('Data not available') }}</p>
                     </div>
                     <!-- Green Hydrogen Potential -->
                     <div class="bg-background-secondary dark:bg-background-tertiary rounded-lg shadow-md p-4">
-                        <h4 class="text-lg font-semibold text-text-primary dark:text-text-secondary mb-2">Green Hydrogen Potential</h4>
-                        <p class="text-text-secondary dark:text-text-tertiary">Data not available</p>
+                        <h4 class="text-lg font-semibold text-text-primary dark:text-text-secondary mb-2">{{ _('Green Hydrogen Potential') }}</h4>
+                        <p class="text-text-secondary dark:text-text-tertiary">{{ _('Data not available') }}</p>
                     </div>
                 </div>
 
                 <!-- Time-Series Chart Block -->
                 <div id="timeSeriesChart" class="mb-4">
-                    <h3 class="text-xl font-semibold text-text-primary dark:text-text-secondary mb-2">Time-Series Chart</h3>
-                    <p class="text-text-secondary dark:text-text-tertiary">Chart will be rendered here.</p>
+                    <h3 class="text-xl font-semibold text-text-primary dark:text-text-secondary mb-2">{{ _('Time-Series Chart') }}</h3>
+                    <div class="bg-background-secondary dark:bg-background-tertiary p-4 rounded-lg">
+                        <div id="timeSeriesChartContainer" style="height: 300px;">
+                            <!-- Chart will be rendered here -->
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Comparative Analytics Chart Block -->
                 <div id="comparativeChart" class="mb-4">
-                    <h3 class="text-xl font-semibold text-text-primary dark:text-text-secondary mb-2">Comparative Analytics Chart</h3>
-                    <p class="text-text-secondary dark:text-text-tertiary">Chart will be rendered here.</p>
+                    <h3 class="text-xl font-semibold text-text-primary dark:text-text-secondary mb-2">{{ _('Comparative Analytics Chart') }}</h3>
+                    <div class="bg-background-secondary dark:bg-background-tertiary p-4 rounded-lg">
+                        <div id="comparativeChartContainer" style="height: 300px;">
+                            <!-- Chart will be rendered here -->
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Download Visualization Button Block -->
                 <div>
                     <button class="bg-primary hover:bg-primary-light text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">
-                        Download Visualization
+                        <i class="fas fa-download mr-2"></i>
+                        {{ _('Download Visualization') }}
                     </button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block body_js %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<script src="{{ url_for('static', filename='js/map_init.js') }}"></script>
+<script src="{{ url_for('static', filename='js/layer_control.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 {% endblock %}
