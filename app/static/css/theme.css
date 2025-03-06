@@ -1,53 +1,111 @@
 :root {
-    /* Light Theme Colors */
-    --color-primary: #2563eb;
-    --color-primary-light: #3b82f6;
-    --color-primary-dark: #1d4ed8;
+    /* Light Theme Colors - Representing Algeria's Renewable Energy Resources */
+    --color-solar: #f97316;  /* Solar energy - vibrant orange */
+    --color-solar-light: #fdba74;
+    --color-solar-dark: #c2410c;
     
-    --color-secondary: #059669;
-    --color-secondary-light: #10b981;
-    --color-secondary-dark: #047857;
+    --color-wind: #0284c7;  /* Wind energy - clear sky blue */
+    --color-wind-light: #7dd3fc;
+    --color-wind-dark: #0369a1;
     
-    --color-tertiary: #7c3aed;
-    --color-tertiary-light: #8b5cf6;
-    --color-tertiary-dark: #6d28d9;
+    --color-hydrogen: #059669;  /* Green hydrogen - emerald green */
+    --color-hydrogen-light: #6ee7b7;
+    --color-hydrogen-dark: #047857;
     
+    /* Combined primary colors - Representing Algeria itself */
+    --color-primary: #166534;  /* Algeria's primary green */
+    --color-primary-light: #16a34a;
+    --color-primary-dark: #14532d;
+    
+    --color-secondary: #b45309;  /* Desert amber */
+    --color-secondary-light: #d97706;
+    --color-secondary-dark: #92400e;
+    
+    --color-tertiary: #3b82f6;  /* Sky blue for Mediterranean influence */
+    --color-tertiary-light: #60a5fa;
+    --color-tertiary-dark: #2563eb;
+    
+    /* UI Colors */
+    --color-success: #15803d;
+    --color-warning: #b45309;
+    --color-error: #b91c1c;
+    --color-info: #0369a1;
+    
+    /* Background Colors */
     --color-background-primary: #ffffff;
-    --color-background-secondary: #f3f4f6;
-    --color-background-tertiary: #e5e7eb;
+    --color-background-secondary: #f8fafc;  /* Light neutral */
+    --color-background-tertiary: #f1f5f9;
     
-    --color-text-primary: #111827;
-    --color-text-secondary: #374151;
-    --color-text-tertiary: #6b7280;
+    /* Text Colors */
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #334155;
+    --color-text-tertiary: #64748b;
     
-    --color-border: #e5e7eb;
-    --color-border-focus: #3b82f6;
+    /* Borders and Misc */
+    --color-border: #e2e8f0;
+    --color-border-focus: #16a34a;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    
+    /* Transition */
+    --transition-base: all 0.2s ease-in-out;
 }
 
 /* Dark Theme Colors */
 [data-theme="dark"] {
-    --color-primary: #3b82f6;
-    --color-primary-light: #60a5fa;
-    --color-primary-dark: #2563eb;
+    /* Energy Resources */
+    --color-solar: #fb923c;  /* Brighter orange for dark mode */
+    --color-solar-light: #fdba74;
+    --color-solar-dark: #f97316;
     
-    --color-secondary: #10b981;
-    --color-secondary-light: #34d399;
-    --color-secondary-dark: #059669;
+    --color-wind: #38bdf8;  /* Brighter blue for dark mode */
+    --color-wind-light: #7dd3fc;
+    --color-wind-dark: #0284c7;
     
-    --color-tertiary: #8b5cf6;
-    --color-tertiary-light: #a78bfa;
-    --color-tertiary-dark: #7c3aed;
+    --color-hydrogen: #10b981;  /* Brighter green for dark mode */
+    --color-hydrogen-light: #34d399;
+    --color-hydrogen-dark: #059669;
     
-    --color-background-primary: #111827;
-    --color-background-secondary: #1f2937;
-    --color-background-tertiary: #374151;
+    /* Combined primary colors */
+    --color-primary: #4ade80;  /* Brighter green for dark mode */
+    --color-primary-light: #86efac;
+    --color-primary-dark: #22c55e;
     
-    --color-text-primary: #f9fafb;
-    --color-text-secondary: #e5e7eb;
-    --color-text-tertiary: #d1d5db;
+    --color-secondary: #f59e0b;  /* Brighter amber for dark mode */
+    --color-secondary-light: #fbbf24;
+    --color-secondary-dark: #d97706;
     
-    --color-border: #374151;
-    --color-border-focus: #60a5fa;
+    --color-tertiary: #60a5fa;  /* Brighter blue for dark mode */
+    --color-tertiary-light: #93c5fd;
+    --color-tertiary-dark: #3b82f6;
+    
+    /* UI Colors */
+    --color-success: #22c55e;
+    --color-warning: #fbbf24;
+    --color-error: #ef4444;
+    --color-info: #38bdf8;
+    
+    /* Background Colors */
+    --color-background-primary: #0f172a;  /* Deep blue-gray */
+    --color-background-secondary: #1e293b;
+    --color-background-tertiary: #334155;
+    
+    /* Text Colors */
+    --color-text-primary: #f8fafc;
+    --color-text-secondary: #e2e8f0;
+    --color-text-tertiary: #cbd5e1;
+    
+    /* Borders and Misc */
+    --color-border: #334155;
+    --color-border-focus: #4ade80;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
 }
 
 /* Tailwind CSS Custom Colors */
@@ -63,10 +121,25 @@
 .bg-tertiary-light { background-color: var(--color-tertiary-light); }
 .bg-tertiary-dark { background-color: var(--color-tertiary-dark); }
 
+/* Energy-specific background colors */
+.bg-solar { background-color: var(--color-solar); }
+.bg-solar-light { background-color: var(--color-solar-light); }
+.bg-solar-dark { background-color: var(--color-solar-dark); }
+
+.bg-wind { background-color: var(--color-wind); }
+.bg-wind-light { background-color: var(--color-wind-light); }
+.bg-wind-dark { background-color: var(--color-wind-dark); }
+
+.bg-hydrogen { background-color: var(--color-hydrogen); }
+.bg-hydrogen-light { background-color: var(--color-hydrogen-light); }
+.bg-hydrogen-dark { background-color: var(--color-hydrogen-dark); }
+
+/* Background colors */
 .bg-background-primary { background-color: var(--color-background-primary); }
 .bg-background-secondary { background-color: var(--color-background-secondary); }
 .bg-background-tertiary { background-color: var(--color-background-tertiary); }
 
+/* Text colors */
 .text-primary { color: var(--color-primary); }
 .text-primary-light { color: var(--color-primary-light); }
 .text-primary-dark { color: var(--color-primary-dark); }
@@ -79,9 +152,32 @@
 .text-tertiary-light { color: var(--color-tertiary-light); }
 .text-tertiary-dark { color: var(--color-tertiary-dark); }
 
+/* Energy-specific text colors */
+.text-solar { color: var(--color-solar); }
+.text-solar-light { color: var(--color-solar-light); }
+.text-solar-dark { color: var(--color-solar-dark); }
+
+.text-wind { color: var(--color-wind); }
+.text-wind-light { color: var(--color-wind-light); }
+.text-wind-dark { color: var(--color-wind-dark); }
+
+.text-hydrogen { color: var(--color-hydrogen); }
+.text-hydrogen-light { color: var(--color-hydrogen-light); }
+.text-hydrogen-dark { color: var(--color-hydrogen-dark); }
+
+/* Text content colors */
 .text-text-primary { color: var(--color-text-primary); }
 .text-text-secondary { color: var(--color-text-secondary); }
 .text-text-tertiary { color: var(--color-text-tertiary); }
 
+/* Border colors */
 .border-color-border { border-color: var(--color-border); }
 .focus\:border-color-focus:focus { border-color: var(--color-border-focus); }
+
+/* Shadows */
+.shadow-sm { box-shadow: var(--shadow-sm); }
+.shadow-md { box-shadow: var(--shadow-md); }
+.shadow-lg { box-shadow: var(--shadow-lg); }
+
+/* Transitions */
+.transition-base { transition: var(--transition-base); }

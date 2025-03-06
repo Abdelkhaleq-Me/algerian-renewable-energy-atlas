@@ -1,0 +1,121 @@
+/* Animations for Renewable Energy Elements */
+
+/* Solar Panel Shine Effect */
+@keyframes solarShine {
+    0% { background-position: 200% center; }
+    100% { background-position: -200% center; }
+}
+
+.solar-panel {
+    background: linear-gradient(
+        90deg,
+        var(--color-background-primary) 25%,
+        var(--color-primary-light) 50%,
+        var(--color-background-primary) 75%
+    );
+    background-size: 200% 100%;
+    animation: solarShine 8s linear infinite;
+}
+
+/* Wind Turbine Rotation */
+@keyframes windRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.wind-turbine {
+    transform-origin: center;
+    animation: windRotate 8s linear infinite;
+}
+
+/* Energy Flow Effect */
+@keyframes energyFlow {
+    0% { stroke-dashoffset: 1000; }
+    100% { stroke-dashoffset: 0; }
+}
+
+.energy-path {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: energyFlow 3s linear infinite;
+}
+
+/* Hover Effects */
+.hover-lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Page Transitions */
+.page-enter {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.page-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Loading Spinner */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-spinner {
+    width: 2rem;
+    height: 2rem;
+    border: 3px solid var(--color-background-secondary);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Data Visualization Animations */
+@keyframes barGrow {
+    from { transform: scaleY(0); }
+    to { transform: scaleY(1); }
+}
+
+.chart-bar {
+    transform-origin: bottom;
+    animation: barGrow 1s ease-out forwards;
+}
+
+/* Notification Pop */
+@keyframes notificationPop {
+    0% { transform: scale(0.8); opacity: 0; }
+    20% { transform: scale(1.1); }
+    40% { transform: scale(0.95); }
+    60% { transform: scale(1.03); }
+    80% { transform: scale(0.97); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.notification {
+    animation: notificationPop 0.5s ease-out forwards;
+}
+
+/* Gradient Pulse */
+@keyframes gradientPulse {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.gradient-pulse {
+    background: linear-gradient(
+        45deg,
+        var(--color-primary),
+        var(--color-secondary),
+        var(--color-tertiary),
+        var(--color-primary)
+    );
+    background-size: 400% 400%;
+    animation: gradientPulse 8s ease infinite;
+}

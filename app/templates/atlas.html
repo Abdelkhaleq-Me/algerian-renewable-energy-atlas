@@ -4,141 +4,346 @@
 
 {% block head_css %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+    /* Full-height layout styles */
+    html, body {
+        height: 100%;
+        overflow: hidden;
+    }
+    
+    /* Remove padding from main container */
+    main {
+        padding: 0 !important;
+        height: calc(100vh - 64px); /* Adjust based on header height */
+    }
+    
+    /* Make the content fill the entire screen */
+    .full-height-container {
+        height: 100%;
+        width: 100%;
+    }
+    
+    /* Map container takes full height */
+    #mapContainer {
+        height: 100%;
+        border-radius: 0;
+    }
+    
+    /* Hide scrollbar for cleaner look */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    
+    /* Make sure the dashboard doesn't overflow */
+    .dashboard-container {
+        height: 100%;
+        overflow-y: auto;
+    }
+    
+    /* Improved control panel styling */
+    .floating-controls {
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        box-shadow: var(--shadow-md);
+        transition: var(--transition-base);
+    }
+    
+    .floating-controls:hover {
+        box-shadow: var(--shadow-lg);
+    }
+    
+    /* Energy type indicator */
+    .energy-indicator {
+        height: 4px;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Custom radio button styling */
+    input[type="radio"] {
+        position: relative;
+        cursor: pointer;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        width: 1.25rem;
+        height: 1.25rem;
+        border-radius: 50%;
+        outline: none;
+        border: 2px solid var(--color-border);
+        background-color: var(--color-background-primary);
+        transition: var(--transition-base);
+    }
+    
+    input[type="radio"]:checked {
+        border-color: var(--color-primary);
+    }
+    
+    input[type="radio"]:checked::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background-color: var(--color-primary);
+    }
+    
+    input[name="solarLayer"]:checked {
+        border-color: var(--color-solar);
+    }
+    
+    input[name="solarLayer"]:checked::before {
+        background-color: var(--color-solar);
+    }
+    
+    input[name="windLayer"]:checked {
+        border-color: var(--color-wind);
+    }
+    
+    input[name="windLayer"]:checked::before {
+        background-color: var(--color-wind);
+    }
+    
+    input[name="hydrogenLayer"]:checked {
+        border-color: var(--color-hydrogen);
+    }
+    
+    input[name="hydrogenLayer"]:checked::before {
+        background-color: var(--color-hydrogen);
+    }
+    
+    /* Stats card improvements */
+    .stats-card {
+        transition: var(--transition-base);
+        border-radius: 0.75rem;
+        overflow: hidden;
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+    
+    /* Improved chart container styling */
+    .chart-container {
+        border-radius: 0.75rem;
+        overflow: hidden;
+        transition: var(--transition-base);
+    }
+    
+    .chart-container:hover {
+        box-shadow: var(--shadow-md);
+    }
+    
+    /* Remove animation from main content to prevent layout shifts */
+    .animate-fade-in {
+        animation: none !important;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="container mx-auto py-8">
-    <div class="flex flex-col md:flex-row">
-        <!-- Left Panel: Interactive Map -->
-        <div class="w-full md:w-1/2 p-4">
-            <!-- Map Container -->
-            <div id="mapContainer" class="relative h-[600px] mb-4">
-                <!-- Leaflet map will be rendered here -->
-                <div id="map" class="z-10 h-full w-full"></div>
+<div class="full-height-container flex flex-col lg:flex-row">
+    <!-- Left Column (Map Section) - 70% Width -->
+    <div class="w-full lg:w-[70%] h-full">
+        <!-- Map Container -->
+        <div id="mapContainer" class="relative">
+            <!-- Leaflet map will be rendered here -->
+            <div id="map" class="z-10 h-full w-full"></div>
 
-                <!-- Floating Controls -->
-                <div class="floating-controls">
-                    <!-- Layer Control -->
-                    <div class="control-section">
-                        <div class="control-header" onclick="toggleSection('layerControl')">
-                            <h3 class="text-lg font-semibold text-text-primary dark:text-text-secondary">{{ _('Layer Control') }}</h3>
-                            <svg class="control-minimize w-4 h-4 text-text-primary dark:text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </div>
-                        <div id="layerControlContent" class="control-content">
-                            <div class="flex flex-col space-y-2">
-                                <label class="inline-flex items-center">
-                                    <input type="checkbox" class="form-checkbox h-5 w-5 text-primary" id="solarLayerToggle">
-                                    <span class="ml-2 text-text-primary dark:text-text-secondary">{{ _('Solar Irradiance') }}</span>
-                                </label>
-                                <label class="inline-flex items-center">
-                                    <input type="checkbox" class="form-checkbox h-5 w-5 text-secondary" id="windLayerToggle">
-                                    <span class="ml-2 text-text-primary dark:text-text-secondary">{{ _('Wind Speed') }}</span>
-                                </label>
-                                <label class="inline-flex items-center">
-                                    <input type="checkbox" class="form-checkbox h-5 w-5 text-tertiary" id="greenHydrogenLayerToggle">
-                                    <span class="ml-2 text-text-primary dark:text-text-secondary">{{ _('Green Hydrogen Potential') }}</span>
-                                </label>
-                            </div>
-                        </div>
+            <!-- Floating Controls -->
+            <div class="floating-controls absolute top-4 right-4 bg-background-primary bg-opacity-90 dark:bg-background-secondary dark:bg-opacity-90 rounded-lg p-4 z-20 w-64">
+                <!-- Filter Controls -->
+                <div class="control-section mb-4">
+                    <div class="control-header flex justify-between items-center mb-2" onclick="toggleSection('filterControls')">
+                        <h3 class="text-lg font-semibold text-text-primary dark:text-text-secondary">{{ _('Filter Controls') }}</h3>
+                        <svg class="control-minimize w-4 h-4 text-text-primary dark:text-text-secondary transition-base" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
                     </div>
-
-                    <!-- Filter Controls -->
-                    <div class="control-section">
-                        <div class="control-header" onclick="toggleSection('filterControls')">
-                            <h3 class="text-lg font-semibold text-text-primary dark:text-text-secondary">{{ _('Filter Controls') }}</h3>
-                            <svg class="control-minimize w-4 h-4 text-text-primary dark:text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </div>
-                        <div id="filterControlsContent" class="control-content">
-                            <div class="space-y-4">
-                                <div>
-                                    <label for="energyTypeFilter" class="block text-text-primary dark:text-text-secondary text-sm font-medium mb-1">{{ _('Energy Type:') }}</label>
-                                    <select id="energyTypeFilter" class="w-full p-2 rounded-md border border-color-border dark:border-color-border bg-background-primary dark:bg-background-secondary text-text-primary dark:text-text-secondary">
-                                        <option value="">{{ _('All') }}</option>
-                                        <option value="solar">{{ _('Solar') }}</option>
-                                        <option value="wind">{{ _('Wind') }}</option>
-                                        <option value="green_hydrogen">{{ _('Green Hydrogen') }}</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="searchBar" class="block text-text-primary dark:text-text-secondary text-sm font-medium mb-1">{{ _('Search:') }}</label>
-                                    <input type="text" id="searchBar" placeholder="{{ _('Region, coordinates...') }}" class="w-full p-2 rounded-md border border-color-border dark:border-color-border bg-background-primary dark:bg-background-secondary text-text-primary dark:text-text-secondary">
-                                </div>
+                    <div id="filterControlsContent" class="control-content">
+                        <div class="space-y-4">
+                            <div>
+                                <label for="energyTypeFilter" class="block text-text-primary dark:text-text-secondary text-sm font-medium mb-1">{{ _('Energy Type:') }}</label>
+                                <select id="energyTypeFilter" class="w-full p-2 rounded-md border border-color-border dark:border-color-border bg-background-primary dark:bg-background-secondary text-text-primary dark:text-text-secondary focus:ring focus:ring-opacity-50 outline-none">
+                                    <option value="solar">{{ _('Solar Energy') }}</option>
+                                    <option value="wind">{{ _('Wind Energy') }}</option>
+                                    <option value="green_hydrogen">{{ _('Green Hydrogen') }}</option>
+                                </select>
+                                <div id="energyTypeIndicator" class="energy-indicator bg-solar mt-1 rounded-full"></div>
+                            </div>
+                            <div>
+                                <label for="wilayaFilter" class="block text-text-primary dark:text-text-secondary text-sm font-medium mb-1">{{ _('Wilaya:') }}</label>
+                                <select id="wilayaFilter" class="w-full p-2 rounded-md border border-color-border dark:border-color-border bg-background-primary dark:bg-background-secondary text-text-primary dark:text-text-secondary focus:ring focus:ring-opacity-50 outline-none">
+                                    <option value="">{{ _('All Wilayas') }}</option>
+                                    <!-- Options will be populated dynamically -->
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Loading Indicator -->
-                <div id="mapLoadingIndicator" class="absolute bottom-0 left-0 w-full bg-background-secondary dark:bg-background-tertiary text-text-primary dark:text-text-secondary text-center py-2 z-20">
-                    {{ _('Loading data...') }}
+                <!-- Layer Control -->
+                <div class="control-section">
+                    <div class="control-header flex justify-between items-center mb-2" onclick="toggleSection('layerControl')">
+                        <h3 class="text-lg font-semibold text-text-primary dark:text-text-secondary">{{ _('Layer Control') }}</h3>
+                        <svg class="control-minimize w-4 h-4 text-text-primary dark:text-text-secondary transition-base" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                    
+                    <!-- Solar Energy Layers (visible when solar energy is selected) -->
+                    <div id="solarLayerControlContent" class="layer-control-content control-content">
+                        <div class="flex flex-col space-y-3 p-2 bg-background-secondary bg-opacity-50 dark:bg-background-tertiary dark:bg-opacity-50 rounded-lg">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="solarLayer" class="form-radio h-5 w-5" value="ghi" checked>
+                                <span class="ml-2 text-text-primary dark:text-text-secondary text-sm">{{ _('GHI (Global Horizontal Irradiance)') }}</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="solarLayer" class="form-radio h-5 w-5" value="dni">
+                                <span class="ml-2 text-text-primary dark:text-text-secondary text-sm">{{ _('DNI (Direct Normal Irradiance)') }}</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="solarLayer" class="form-radio h-5 w-5" value="dhi">
+                                <span class="ml-2 text-text-primary dark:text-text-secondary text-sm">{{ _('DHI (Diffuse Horizontal Irradiance)') }}</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Wind Energy Layers (initially hidden) -->
+                    <div id="windLayerControlContent" class="layer-control-content control-content hidden">
+                        <div class="flex flex-col space-y-3 p-2 bg-background-secondary bg-opacity-50 dark:bg-background-tertiary dark:bg-opacity-50 rounded-lg">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="windLayer" class="form-radio h-5 w-5" value="wind10" checked>
+                                <span class="ml-2 text-text-primary dark:text-text-secondary text-sm">{{ _('Wind Speed at 10m') }}</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="windLayer" class="form-radio h-5 w-5" value="wind50">
+                                <span class="ml-2 text-text-primary dark:text-text-secondary text-sm">{{ _('Wind Speed at 50m') }}</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Green Hydrogen Layers (initially hidden) -->
+                    <div id="hydrogenLayerControlContent" class="layer-control-content control-content hidden">
+                        <div class="flex flex-col space-y-3 p-2 bg-background-secondary bg-opacity-50 dark:bg-background-tertiary dark:bg-opacity-50 rounded-lg">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="hydrogenLayer" class="form-radio h-5 w-5" value="hydrogen_potential" checked>
+                                <span class="ml-2 text-text-primary dark:text-text-secondary text-sm">{{ _('Green Hydrogen Potential') }}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="mapLoadingIndicator" class="absolute bottom-0 left-0 w-full bg-background-secondary dark:bg-background-tertiary text-text-primary dark:text-text-secondary text-center py-2 z-20 hidden">
+                <div class="flex items-center justify-center">
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>{{ _('Loading data...') }}</span>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Right Panel: Dashboard & Data Visualizations -->
-        <div class="w-full md:w-1/2 p-4">
-            <div id="dashboard">
-                <!-- Wilaya Overview Block -->
-                <div id="wilayaOverview" class="mb-4">
-                    <h3 class="text-xl font-semibold text-text-primary dark:text-text-secondary mb-2">{{ _('Wilaya Overview') }}</h3>
-                    <p class="text-text-secondary dark:text-text-tertiary">{{ _('Select a region to view detailed information.') }}</p>
-                    <!-- Region Selector (Dropdown) -->
-                    <select id="regionSelector" class="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary dark:text-text-secondary leading-tight focus:outline-none focus:shadow-outline bg-background-primary dark:bg-background-secondary">
-                        <option value="">{{ _('Select Region') }}</option>
-                        <!-- Options will be populated dynamically -->
-                    </select>
-                </div>
-
+    <!-- Right Column (Dashboard Section) - 30% Width -->
+    <div class="w-full lg:w-[30%] h-full bg-background-primary dark:bg-background-secondary border-l border-color-border dark:border-color-border">
+        <div class="dashboard-container no-scrollbar p-4">
+            <!-- Wilaya Overview Block -->
+            <div id="wilayaOverview" class="bg-white dark:bg-background-tertiary rounded-lg shadow-md p-4 mb-4">
+                <h3 class="text-xl font-semibold text-text-primary dark:text-text-secondary mb-3">{{ _('Wilaya Overview') }}</h3>
+                <div id="selectedWilayaName" class="text-lg font-medium text-primary mb-4">{{ _('Select a wilaya on the map') }}</div>
+                
                 <!-- Stats Cards Block -->
-                <div id="statsCards" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div id="statsCards" class="space-y-4">
                     <!-- Solar Potential -->
-                    <div class="bg-background-secondary dark:bg-background-tertiary rounded-lg shadow-md p-4">
-                        <h4 class="text-lg font-semibold text-text-primary dark:text-text-secondary mb-2">{{ _('Solar Potential') }}</h4>
-                        <p class="text-text-secondary dark:text-text-tertiary">{{ _('Data not available') }}</p>
+                    <div class="stats-card bg-background-secondary dark:bg-background-tertiary rounded-lg p-4 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-solar"></div>
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <h4 class="text-lg font-semibold text-text-primary dark:text-text-secondary mb-1">{{ _('Solar Potential') }}</h4>
+                                <p id="solarPotentialValue" class="text-2xl font-bold text-solar">--</p>
+                                <p class="text-sm text-text-tertiary">{{ _('kWh/m²') }}</p>
+                            </div>
+                            <div class="text-solar-light opacity-50">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                            </div>
+                        </div>
                     </div>
+                    
                     <!-- Wind Speed -->
-                    <div class="bg-background-secondary dark:bg-background-tertiary rounded-lg shadow-md p-4">
-                        <h4 class="text-lg font-semibold text-text-primary dark:text-text-secondary mb-2">{{ _('Wind Speed') }}</h4>
-                        <p class="text-text-secondary dark:text-text-tertiary">{{ _('Data not available') }}</p>
+                    <div class="stats-card bg-background-secondary dark:bg-background-tertiary rounded-lg p-4 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-wind"></div>
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <h4 class="text-lg font-semibold text-text-primary dark:text-text-secondary mb-1">{{ _('Wind Speed') }}</h4>
+                                <p id="windSpeedValue" class="text-2xl font-bold text-wind">--</p>
+                                <p class="text-sm text-text-tertiary">{{ _('m/s') }}</p>
+                            </div>
+                            <div class="text-wind-light opacity-50">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
+                                </svg>
+                            </div>
+                        </div>
                     </div>
+                    
                     <!-- Green Hydrogen Potential -->
-                    <div class="bg-background-secondary dark:bg-background-tertiary rounded-lg shadow-md p-4">
-                        <h4 class="text-lg font-semibold text-text-primary dark:text-text-secondary mb-2">{{ _('Green Hydrogen Potential') }}</h4>
-                        <p class="text-text-secondary dark:text-text-tertiary">{{ _('Data not available') }}</p>
+                    <div class="stats-card bg-background-secondary dark:bg-background-tertiary rounded-lg p-4 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-hydrogen"></div>
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <h4 class="text-lg font-semibold text-text-primary dark:text-text-secondary mb-1">{{ _('Green Hydrogen Potential') }}</h4>
+                                <p id="hydrogenPotentialValue" class="text-2xl font-bold text-hydrogen">--</p>
+                                <p class="text-sm text-text-tertiary">{{ _('kg/kWh') }}</p>
+                            </div>
+                            <div class="text-hydrogen-light opacity-50">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
 
+            <!-- Charts & Analytics Section -->
+            <div class="space-y-4">
                 <!-- Time-Series Chart Block -->
-                <div id="timeSeriesChart" class="mb-4">
-                    <h3 class="text-xl font-semibold text-text-primary dark:text-text-secondary mb-2">{{ _('Time-Series Chart') }}</h3>
-                    <div class="bg-background-secondary dark:bg-background-tertiary p-4 rounded-lg">
-                        <div id="timeSeriesChartContainer" style="height: 300px;">
-                            <!-- Chart will be rendered here -->
-                        </div>
+                <div id="timeSeriesChart" class="chart-container bg-white dark:bg-background-tertiary rounded-lg shadow-md p-4">
+                    <h3 class="text-xl font-semibold text-text-primary dark:text-text-secondary mb-3">{{ _('Time-Series Chart') }}</h3>
+                    <div id="timeSeriesChartContainer" class="h-64 w-full">
+                        <!-- Chart will be rendered here -->
                     </div>
                 </div>
 
                 <!-- Comparative Analytics Chart Block -->
-                <div id="comparativeChart" class="mb-4">
-                    <h3 class="text-xl font-semibold text-text-primary dark:text-text-secondary mb-2">{{ _('Comparative Analytics Chart') }}</h3>
-                    <div class="bg-background-secondary dark:bg-background-tertiary p-4 rounded-lg">
-                        <div id="comparativeChartContainer" style="height: 300px;">
-                            <!-- Chart will be rendered here -->
-                        </div>
+                <div id="comparativeChart" class="chart-container bg-white dark:bg-background-tertiary rounded-lg shadow-md p-4">
+                    <h3 class="text-xl font-semibold text-text-primary dark:text-text-secondary mb-3">{{ _('Comparative Analytics') }}</h3>
+                    <div id="comparativeChartContainer" class="h-64 w-full">
+                        <!-- Chart will be rendered here -->
                     </div>
                 </div>
 
-                <!-- Download Visualization Button Block -->
-                <div>
-                    <button class="bg-primary hover:bg-primary-light text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300">
-                        <i class="fas fa-download mr-2"></i>
-                        {{ _('Download Visualization') }}
-                    </button>
-                </div>
+                <!-- Download Visualization Button -->
+                <button id="downloadVisualization" class="w-full bg-primary hover:bg-primary-light text-white font-bold py-3 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 transition-base">
+                    <i class="fas fa-download mr-2"></i>
+                    {{ _('Download Visualization') }}
+                </button>
             </div>
         </div>
     </div>
@@ -151,4 +356,39 @@
 <script src="{{ url_for('static', filename='js/map_init.js') }}"></script>
 <script src="{{ url_for('static', filename='js/layer_control.js') }}"></script>
 <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+<script>
+    // Toggle layer controls based on energy type
+    document.getElementById('energyTypeFilter').addEventListener('change', function() {
+        // Hide all layer control content
+        document.querySelectorAll('.layer-control-content').forEach(el => {
+            el.classList.add('hidden');
+        });
+        
+        // Show relevant layer control based on selection
+        const energyType = this.value;
+        if (energyType === 'solar') {
+            document.getElementById('solarLayerControlContent').classList.remove('hidden');
+            document.getElementById('energyTypeIndicator').className = 'energy-indicator bg-solar mt-1 rounded-full';
+        } else if (energyType === 'wind') {
+            document.getElementById('windLayerControlContent').classList.remove('hidden');
+            document.getElementById('energyTypeIndicator').className = 'energy-indicator bg-wind mt-1 rounded-full';
+        } else if (energyType === 'green_hydrogen') {
+            document.getElementById('hydrogenLayerControlContent').classList.remove('hidden');
+            document.getElementById('energyTypeIndicator').className = 'energy-indicator bg-hydrogen mt-1 rounded-full';
+        }
+        
+        // Trigger layer change event for the map
+        updateMapLayers(energyType);
+    });
+    
+    // Initialize with solar selected by default
+    document.getElementById('solarLayerControlContent').classList.remove('hidden');
+    
+    // Force map resize when the page loads to ensure it fills the container
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            window.dispatchEvent(new Event('resize'));
+        }, 100);
+    });
+</script>
 {% endblock %}
